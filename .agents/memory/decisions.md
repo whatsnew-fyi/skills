@@ -19,4 +19,5 @@ the same number. Cite an ADR by its id, exactly as its heading spells it.
 | [2026-09.d3hx](decisions/2026-09-d3hx-the-product-skills-ship-as.md) | the product skills ship as one plugin under plugins, not in .agents/skills | layout, distribution |
 | [2026-09.dqcj](decisions/2026-09-dqcj-evals-answer-from-mocks-recorded.md) | evals answer from mocks recorded off production | evals, testing |
 | [2026-09.fm4r](decisions/2026-09-fm4r-each-skill-calls-the-mcp.md) | each skill calls the MCP server and falls back to a stdlib HTTP script | mcp, portability |
+| [2026-09.vyb9](decisions/2026-09-vyb9-the-whatsnew-plugin-also-ships.md) | the whatsnew plugin also ships a publisher skill that needs no MCP server | scope, layout |
 | [2026-09.wez2](decisions/2026-09-wez2-private-packages-never-leave-the.md) | private packages never leave the machine, and misses stay recorded | privacy, mcp |

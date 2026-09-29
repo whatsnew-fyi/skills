@@ -13,14 +13,15 @@ python3 -m unittest discover -s tests                 # the skills' scripts
 claude plugin validate --strict .                      # marketplace manifest
 claude plugin validate --strict plugins/whatsnew       # plugin, skills, .mcp.json
 python3 scripts/adr.py index --check                   # decisions router is current
-npx -y declarative-changelog@0.1 validate CHANGELOG.md --require-level 2 --max-warnings 0
+npx -y declarative-changelog@0.2 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
 `.claude/hooks/lintorama-stop.sh` runs the `zaventh/lintorama` container (shellcheck,
 markdownlint, yamllint, actionlint) as a Stop hook and blocks the turn until its
 findings are fixed; it no-ops without Docker. Both CIs' `lintorama` jobs run the same
-image and fail the build on any finding. Config: `.mdlrc` (relaxed; MD029 off
-because step numbering is intentional) and `.yamllint` (relaxed, no line-length).
+image and fail the build on any finding. Config: `.mdlrc` points at `.mdl_style.rb`
+(the relaxed style, with MD029 off because step numbering is intentional, and MD024
+relaxed so a changelog can repeat `### Added` under each release) and `.yamllint` (relaxed, no line-length).
 Run it by hand with:
 
 ```sh
@@ -56,13 +57,20 @@ python3 plugins/whatsnew/skills/outdated-audit/scripts/outdated_to_deps.py tests
   python3 plugins/whatsnew/skills/outdated-audit/scripts/whatsnew_call.py missing_changes
 ```
 
+Draft a changelog entry from any repository's Conventional Commits (it only reads
+`git log`, and prints the entry):
+
+```sh
+python3 plugins/whatsnew/skills/declarative-changelog/scripts/draft_entry.py --since v0.1.0
+```
+
 Or install the plugin from this checkout. Remove it afterwards: it is written to
 your user settings.
 
 ```sh
 claude plugin marketplace add ./
 claude plugin install whatsnew@whatsnew-fyi
-claude plugin details whatsnew                 # expect Skills (2), MCP servers (1)
+claude plugin details whatsnew                 # expect Skills (3), MCP servers (1)
 claude plugin marketplace remove whatsnew-fyi  # uninstalls its plugins too
 ```
 

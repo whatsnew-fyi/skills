@@ -16,6 +16,7 @@ growing an explanation, that explanation belongs in the ADR.
 | `whatsnew_call.py`, or how a skill reaches the server | [ADR 2026-09.fm4r](../memory/decisions/2026-09-fm4r-each-skill-calls-the-mcp.md) |
 | what a skill sends: package names, `recordMisses`, `outdated_to_deps.py` skips | [ADR 2026-09.wez2](../memory/decisions/2026-09-wez2-private-packages-never-leave-the.md) |
 | `plugins/whatsnew/evals/`, mocks or fixtures | [ADR 2026-09.dqcj](../memory/decisions/2026-09-dqcj-evals-answer-from-mocks-recorded.md) |
+| `declarative-changelog`, a skill that makes no MCP call or edits user files, the plugin's scope | [ADR 2026-09.vyb9](../memory/decisions/2026-09-vyb9-the-whatsnew-plugin-also-ships.md) |
 
 ## Where they live
 

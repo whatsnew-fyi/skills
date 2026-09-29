@@ -4,11 +4,11 @@ product:
   name: whatsnew skills
   vendor: whatsnew.fyi
   homepage: https://github.com/whatsnew-fyi/skills
-  description: Agent skills that review dependency upgrades and audit outdated projects against vendor release notes.
+  description: Agent skills that review dependency upgrades and audit outdated projects against vendor release notes, and write changelogs tools can read.
   versioning: semver
   category: developer-tools
 document:
-  updated: 2026-09-28T00:00:00Z
+  updated: 2026-09-29T05:59:00Z
   coverage: complete
   canonical: https://github.com/whatsnew-fyi/skills/blob/main/CHANGELOG.md
 ---
@@ -16,6 +16,15 @@ document:
 # whatsnew skills changelog
 
 This file is a [Declarative Changelog](https://whatsnew.fyi/spec), validated in CI.
+
+## [0.2.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.2.0) — 2026-09-29T05:59:00Z
+
+> A third skill for the other side of release notes: writing your own `CHANGELOG.md` so tools read it without guessing.
+
+### Added
+
+- `declarative-changelog` skill that converts a changelog to the Declarative Changelogs format, adds release entries, and fixes the file until `declarative-changelog validate` reports Level 2 with no warnings.
+- `draft_entry.py` script that drafts a release entry from Conventional Commits, with the `**Breaking**` marker, `(routine)` releases and a suggested semver bump, without writing any file.
 
 ## [0.1.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.1.0) — 2026-09-28T00:00:00Z
 

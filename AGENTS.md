@@ -4,8 +4,10 @@
 
 You maintain **What's New's public agent skills**: a Claude Code plugin marketplace
 whose one plugin, `whatsnew`, ships Agent Skills that answer dependency questions from
-the [What's New](https://whatsnew.fyi) MCP server. People install these into their own
-agents, so every skill must be useful to someone who has never heard of What's New.
+the [What's New](https://whatsnew.fyi) MCP server, plus one publisher skill that writes
+changelogs in the Declarative Changelogs format (ADR 2026-09.vyb9). People install these
+into their own agents, so every skill must be useful to someone who has never heard of
+What's New.
 
 - `.claude-plugin/marketplace.json`: the marketplace (`whatsnew-fyi`).
 - `plugins/whatsnew/`: the plugin, with its skills, `.mcp.json` and evals.

@@ -1,3 +1,1 @@
-style "relaxed"
-# MD029: ordered-list numbering is intentional in the specs and skills (steps are renumbered by hand).
-rules "~MD029"
+style ".mdl_style.rb"

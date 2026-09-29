@@ -42,11 +42,22 @@ new skills too.
 - Python 3.8+, standard library only, with no install step. A skill that needs `pip
   install` first will not get used.
 - A script never writes into the user's repository, and never runs a package manager
-  that changes state (`npm update`, `pip install`). Skills audit and review. The user
-  decides what changes.
+  that changes state (`npm update`, `pip install`). The dependency skills audit and
+  review, and the user decides what changes. `declarative-changelog` is the one skill
+  whose agent edits a file, and only the changelog the user asked about (ADR
+  2026-09.vyb9).
 - A script shared between skills is copied into each one (ADR 2026-09.fm4r). Edit one
   copy, then copy it over the others. `tests/test_scripts.py` fails while they differ.
 - Package names the server can never track stay on the machine (ADR 2026-09.wez2).
+
+## The changelog format has an owner
+
+- `declarative-changelog` teaches a draft standard this repository does not own. Its
+  source of truth is `whatsnew-app` (`src/app/spec/content.md`, served at
+  <https://whatsnew.fyi/spec.md>). The validator's closed vocabularies live in the
+  `declarative-changelog` npm package (`src/constants.ts`). When either changes,
+  refresh `references/format.md` and the pinned `declarative-changelog@<version>` in the
+  skill, the CIs and `.agents/context/commands.md`, together.
 
 ## Every change ships with its evidence
 

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: declarative-changelog-release
+description: A new release entry from four Conventional Commits, one of them breaking and one a chore, added to a declarative changelog at 1.4.0.
+tags: [declarative-changelog, trigger]
+context:
+  scaffold_script: fixture.sh

@@ -24,7 +24,7 @@ import urllib.error
 import urllib.request
 
 ENDPOINT = os.environ.get("WHATSNEW_MCP_URL", "https://whatsnew.fyi/mcp")
-USER_AGENT = "whatsnew-skills/0.1.0 (+https://github.com/whatsnew-fyi/skills)"
+USER_AGENT = "whatsnew-skills/0.2.0 (+https://github.com/whatsnew-fyi/skills)"
 TIMEOUT_SECONDS = 90
 
 

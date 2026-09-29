@@ -1,7 +1,7 @@
 {
   "name": "whatsnew",
-  "version": "0.1.0",
-  "description": "Review dependency upgrades against the vendor's own breaking-change notes, and audit what an outdated project is missing, security fixes first. Backed by the What's New MCP server: no key, no sign-in.",
+  "version": "0.2.0",
+  "description": "Review dependency upgrades against the vendor's own breaking-change notes, audit what an outdated project is missing, security fixes first, and write your own CHANGELOG.md as a Declarative Changelog that tools can read without guessing. Release data from the What's New MCP server: no key, no sign-in.",
   "author": {
     "name": "What's New",
     "email": "hello@whatsnew.fyi",
@@ -10,5 +10,5 @@
   "homepage": "https://whatsnew.fyi/mcp/setup",
   "repository": "https://github.com/whatsnew-fyi/skills",
   "license": "MIT",
-  "keywords": ["dependencies", "upgrades", "changelog", "release-notes", "security", "cve", "dependabot", "renovate", "mcp"]
+  "keywords": ["dependencies", "upgrades", "changelog", "release-notes", "security", "cve", "dependabot", "renovate", "mcp", "declarative-changelog", "keep-a-changelog", "conventional-commits"]
 }

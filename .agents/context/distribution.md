@@ -6,8 +6,8 @@ How the skills reach people, and what a release changes for them.
 
 | Path | Command | What arrives |
 | --- | --- | --- |
-| Claude Code marketplace | `/plugin marketplace add whatsnew-fyi/skills`, then `/plugin install whatsnew@whatsnew-fyi` | both skills plus the MCP server |
-| Any Agent Skills agent | `npx skills add whatsnew-fyi/skills` (`--skill <id>` for one) | the skill folders only, so the skill falls back to `whatsnew_call.py` |
+| Claude Code marketplace | `/plugin marketplace add whatsnew-fyi/skills`, then `/plugin install whatsnew@whatsnew-fyi` | every skill plus the MCP server |
+| Any Agent Skills agent | `npx skills add whatsnew-fyi/skills` (`--skill <id>` for one) | the skill folders only, so the dependency skills fall back to `whatsnew_call.py` |
 | MCP only | point a client at `https://whatsnew.fyi/mcp` (setup page: `https://whatsnew.fyi/mcp/setup`) | the tools with no skills |
 
 The plugin's `.mcp.json` references the server by its `https://` URL rather than a

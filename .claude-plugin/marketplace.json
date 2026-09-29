@@ -10,7 +10,7 @@
     {
       "name": "whatsnew",
       "source": "./plugins/whatsnew",
-      "description": "Review dependency upgrades against the vendor's own breaking-change notes, and audit what an outdated project is missing, security fixes first."
+      "description": "Review dependency upgrades against the vendor's own breaking-change notes, audit what an outdated project is missing, security fixes first, and write your own CHANGELOG.md as a Declarative Changelog that tools can read without guessing."
     }
   ]
 }

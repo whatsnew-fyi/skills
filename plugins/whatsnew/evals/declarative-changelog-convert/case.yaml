@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: declarative-changelog-convert
+description: A Keep a Changelog file with a BREAKING CHANGES section, a (beta) tag and an unpadded date, converted to the declarative format.
+tags: [declarative-changelog, trigger]
+context:
+  scaffold_script: fixture.sh

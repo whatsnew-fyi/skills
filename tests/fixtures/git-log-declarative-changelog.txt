@@ -1,0 +1,107 @@
+d2067cb6b3342973d0c0b36fadc19befb3e423cechore(release): prepare v0.2.0Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+1b31fa799348d2db52a7bde1df1a445f6c4761bdfix(frontmatter)!: accept bare hex product.color and explain empty valuesAn unquoted `#` in `color: #1a73e8` opens a YAML comment, leaving the
+value empty; report that cause. Parsed output is now the bare form.
+
+BREAKING CHANGE: parsed `product.color` no longer carries a leading `#`;
+consumers expecting `#RRGGBB` now receive `RRGGBB`.
+
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+1c2d0a45a6ce827219193e96ae053369ffac493bci: bump actions/checkout and actions/setup-node to v5Node 20 action runtimes are deprecated on GitHub runners; v5 of both
+actions runs on Node 24 natively.
+
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01RHWcy5bV9GUeYKAofREA7B
+
+88733a69d4fdfa7d0ce76aa7bb5a263dad520388chore(release): prepare v0.1.0 for npm publishThe package had no license, no CI, no release automation, and
+package.json metadata too thin to be installable in good conscience.
+Add LICENSE (MIT), CONTRIBUTING.md, and a CHANGELOG.md that dogfoods
+the tool's own spec. Add a CI workflow (lint/build/test on Node
+20/22/24, plus validating our own CHANGELOG.md) and a release
+workflow that publishes to npm with provenance on GitHub release.
+Round out package.json (repository, homepage, bugs, keywords,
+sideEffects, a prepublishOnly gate) and rewrite the README with
+install instructions, a quick-start walkthrough, and full rule
+tables, so the published package explains itself.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+0b748be7dd674bcd1d6911acb2baeaf6a6aae25cfeat!: drop platform tokens from the heading tag runPlatform values were living in two places: the heading tag run and
+product.platforms/the escape hatch. Collapsing them to the latter
+only keeps the run scanning as lifecycle facts (yanked, routine) and
+makes platforms/frontmatter the single source of truth, with the
+hatch as the per-entry override.
+
+A platform token in a heading is now an unknown tag, not a platform
+assignment — heading/unknown-tag fires and the consumer drops the
+token. PLATFORM_TAGS/PlatformTag are renamed PLATFORMS/Platform, and
+platform-value checking is factored into checkPlatforms, shared by
+frontmatter and escape-hatch parsing.
+
+BREAKING CHANGE: a release heading tag run no longer accepts platform
+tokens (e.g. `(yanked, linux)`). Use product.platforms or the escape
+hatch's `platforms:` key instead; a platform token left in a heading
+now reports heading/unknown-tag.
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+
+9cedcf502175cf9bad0aca6a0e0fc04249dbce9efeat!: enforce spec's YAML profile and tighten conformance rulesParsing and validation had drifted from a close reading of the draft
+spec; this pass closes those gaps so the tool trusts nothing the
+spec doesn't actually license.
+
+- Parse frontmatter and the escape hatch under the failsafe YAML
+  profile the spec requires (no anchors, aliases, custom tags, or
+  multi-document streams), so unquoted values like `1.10` and dates
+  stay strings instead of misparsing as numbers.
+- Detach change-item reference tails (issues, CVEs, links, credits)
+  into structured `references` instead of discarding them, and
+  recognize covered-version attribution (`**2.3.1** — ...`),
+  validated against the entry's `covers`.
+- Never fall back to a fabricated GitHub-anchor fragment for an
+  entry's URL; only `url:`, the heading link, canonical, or
+  homepage are trusted.
+- Split skipped headings into date-bearing candidates vs. plain
+  non-candidates, diagnosing near-misses (unpadded dates, no-break
+  spaces, missing seconds/offset) as errors instead of silence.
+- Promote duplicate `###` sections, a `routine` release with
+  categorized changes, and closed product/document key violations
+  to errors; gate version/content agreement on
+  `product.versioning: semver` instead of guessing a scheme.
+- Redefine Level 2 as a structural scan for stray top-level lists,
+  and report addressability and skipped-heading counts alongside
+  the level.
+
+BREAKING CHANGE: `SkippedHeading.smellsLikeRelease` is renamed to
+`candidate`; `ReleaseEntry.anchor` and `HeadingDate.hasOffset` are
+removed; `heading/skipped-release-like` and `heading/offset-missing`
+are replaced by `heading/candidate-does-not-parse` (error); several
+rule severities changed (`entry/duplicate-section`,
+`frontmatter/unknown-key` on `product`/`document`, unresolved
+`superseded-by`); entry URLs no longer fall back to a
+canonical+anchor fragment.
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+
+27b6a91559f54f53b4851bb182d71d9cc36c2302test: add coverage reporting and edge-case/report testsWire up @vitest/coverage-v8 (text/html/lcov, src/cli.ts excluded since
+it only runs end-to-end in a child process) and add npm run
+test:coverage. Add tests/edge.test.ts and tests/report.test.ts to
+close gaps around edge cases and report generation.
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+
+dee9504abad74333e2746d59005993522b984f98build(deps): upgrade biome to v2 and bump other dev depsMigrate biome.json to the v2 config schema (files.includes,
+linter.rules.preset) and apply the resulting import-order and
+optional-chaining autofixes across src/. Also bump yaml, tsx,
+typescript, and vitest, and add .ncurc.json to pin @types/node
+out of automatic updates.
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+
+11db827aed1c6aeba225bd538ed93a795b3016defeat: implement declarative changelog validator and parserInitial implementation of the CLI/library per the Declarative
+Changelogs standard v0.1 draft: frontmatter parsing, release-heading
+grammar, Keep a Changelog category rules, YAML escape hatch, and
+the consumer-view JSON mapping used by validate/parse commands.
+
+Co-Authored-By: Claude Sonnet <noreply@anthropic.com>
+

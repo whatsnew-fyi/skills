@@ -1,6 +1,6 @@
 # What's New skills
 
-**Agent skills that read the release notes before you upgrade.**
+**Agent skills that read the release notes before you upgrade, and help you write your own.**
 
 [![CI](https://github.com/whatsnew-fyi/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/whatsnew-fyi/skills/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -27,6 +27,7 @@ notes for you, for every release in the range, and check them against your code.
 | --- | --- | --- |
 | [`upgrade-review`](plugins/whatsnew/skills/upgrade-review/SKILL.md) | *What has to change in this codebase before the upgrade is safe to merge?* | reviewing a Dependabot or Renovate PR, bumping a package, SDK, framework or GitHub Action, or planning a major-version move |
 | [`outdated-audit`](plugins/whatsnew/skills/outdated-audit/SKILL.md) | *What is this project missing by being behind, and what should we update first?* | you have a pile of outdated dependencies and limited time, or you want to know which security fixes you don't have yet |
+| [`declarative-changelog`](plugins/whatsnew/skills/declarative-changelog/SKILL.md) | *Does our changelog say what changed, in a form both a reader and a parser get right?* | cutting a release, writing a changelog entry from commits, or converting an existing `CHANGELOG.md` so bots and aggregators read it correctly |
 
 **`upgrade-review`** collects the vendor's own breaking-change, migration,
 deprecation and security notes for every release between your version and the
@@ -40,16 +41,26 @@ project doesn't have yet. It splits them into what a plain update reaches inside
 your declared version ranges and what needs a manifest change, and puts the cost of
 each move beside it: major bumps, breaking changes, removals.
 
-Both get their data from [What's New](https://whatsnew.fyi), which tracks the
-release history of more than a thousand packages, apps and tools and serves it over
-a public [MCP server](https://whatsnew.fyi/mcp/setup). No API key, no sign-in.
+**`declarative-changelog`** works on the other end of release notes: your own. It
+converts a `CHANGELOG.md` to the [Declarative Changelogs](https://whatsnew.fyi/spec)
+format, which is Keep a Changelog with YAML frontmatter, a strict release-heading
+grammar and an exact `**Breaking**` marker, so tools stop guessing at your versions,
+dates and breaking changes. It drafts new entries from your Conventional Commits,
+leaves the summary line for you, and runs the `declarative-changelog` validator until
+the file is clean.
+
+`upgrade-review` and `outdated-audit` get their data from
+[What's New](https://whatsnew.fyi), which tracks the release history of more than a
+thousand packages, apps and tools and serves it over a public
+[MCP server](https://whatsnew.fyi/mcp/setup). No API key, no sign-in.
+`declarative-changelog` runs locally and needs no server.
 
 ## Install
 
 ### Claude Code
 
-Add the marketplace, then install the plugin. It brings both skills and connects
-the MCP server.
+Add the marketplace, then install the plugin. It brings all three skills and
+connects the MCP server.
 
 ```text
 /plugin marketplace add whatsnew-fyi/skills
@@ -62,9 +73,10 @@ the MCP server.
 npx skills add whatsnew-fyi/skills
 ```
 
-Add `--skill upgrade-review` or `--skill outdated-audit` to install just one.
+Add `--skill upgrade-review`, `--skill outdated-audit` or
+`--skill declarative-changelog` to install just one.
 
-Installed this way, the skills reach the server through a small bundled script
+Installed this way, the dependency skills reach the server through a small bundled script
 (Python 3.8+, standard library only, no dependencies). If your agent speaks MCP, you
 can also point its config at `https://whatsnew.fyi/mcp` so it calls the tools
 directly.
@@ -84,12 +96,15 @@ You don't need to name the skills. Ask the way you normally would:
 - *"What breaks if we move from Django 4.2 to 5.2?"*
 - *"We're behind on dependencies. What should we update first?"*
 - *"Are we missing any security fixes?"*
+- *"Add the 2.0.0 release to CHANGELOG.md from the commits since v1.4.0."*
+- *"Convert our CHANGELOG.md to a declarative changelog."*
 
 In Claude Code you can also run them directly:
 
 ```text
 /whatsnew:upgrade-review
 /whatsnew:outdated-audit
+/whatsnew:declarative-changelog
 ```
 
 ## Examples
@@ -132,6 +147,31 @@ npm project three packages behind:
 **Untracked (1):** left-pad-nope
 ```
 
+### Declarative changelog
+
+A release entry drafted from Conventional Commits (`feat`, `fix`, `feat!`, `chore`),
+after the agent rewrote the items for readers and wrote the summary:
+
+```markdown
+## [2.0.0](https://github.com/acme/kestrel/releases/tag/v2.0.0) — 2026-09-28T14:02:00Z
+
+> JSON output for every command, and Node 18 is no longer supported.
+
+### Added
+
+- Every command accepts `--json` for machine-readable output. (#212)
+
+### Removed
+
+- **Breaking** — Node.js 18 is no longer supported. Kestrel now requires Node.js 20 or later.
+
+### Fixed
+
+- `kestrel init` no longer crashes when the config file is empty. (#207)
+```
+
+The validator then reports `Level 2 — Categorized · 14 entries · addressable`.
+
 ## Supported ecosystems
 
 | | `upgrade-review` | `outdated-audit` |
@@ -146,11 +186,12 @@ npm project three packages behind:
 | GitHub Actions | yes | |
 
 A package What's New doesn't track yet is reported as untracked, whatever its
-ecosystem.
+ecosystem. `declarative-changelog` works on any project with a `CHANGELOG.md`; its
+draft script reads any git history written as Conventional Commits.
 
 ## How it works
 
-The skills call two tools on the What's New MCP server:
+The dependency skills call two tools on the What's New MCP server:
 
 - **`upgrade_notes`** returns the vendor's breaking-change, migration, deprecation
   and security sections verbatim, for every tracked release between two versions,
@@ -164,9 +205,14 @@ A bundled converter (`outdated_to_deps.py`) reads the outdated report from your
 package manager, batches it into tool calls, and adds what the server needs for an
 exact match.
 
+`declarative-changelog` calls no server. Its draft script (`draft_entry.py`) reads
+`git log` and maps commit types to changelog categories using the spec's table. The
+[`declarative-changelog`](https://www.npmjs.com/package/declarative-changelog) validator
+runs through `npx`, so that skill needs Node.js 20 or later.
+
 ## What leaves your machine
 
-The skills send `whatsnew.fyi` package names, version numbers and, for npm, each
+The dependency skills send `whatsnew.fyi` package names, version numbers and, for npm, each
 package's public source-repository URL (which makes the match exact). They send no
 source code, file paths or anything that names your project.
 
@@ -180,7 +226,10 @@ ask your agent to pass `"recordMisses": false`.
 ## What the skills won't do
 
 - **Change your code or run installers.** They review and audit. Updating is your
-  call, and they give you the exact command.
+  call, and they give you the exact command. The one file a skill edits is the
+  changelog you ask `declarative-changelog` to write.
+- **Invent release facts.** `declarative-changelog` leaves out a date, version or
+  link it can't find in your repository, and tells you which ones.
 - **Call an upgrade safe on missing data.** A package What's New doesn't track is
   reported as untracked, never as fine. For those, check the vendor's changelog.
 - **Replace a vulnerability scanner.** The security counts come from what vendors

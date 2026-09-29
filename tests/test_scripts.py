@@ -4,7 +4,8 @@
 
 The npm, pip and go fixtures are real reports, recorded on 2026-09-28 with home
 paths stripped. cargo, dotnet and yarn are written from each tool's documented
-format.
+format. git-log-declarative-changelog.txt is the real history of the
+declarative-changelog CLI, recorded on 2026-09-28 in draft_entry.py's input format.
 """
 
 import filecmp
@@ -13,6 +14,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -36,6 +38,9 @@ outdated = load_module(
 )
 caller = load_module(
     "whatsnew_call", os.path.join(SKILLS, "upgrade-review", "scripts", "whatsnew_call.py")
+)
+drafter = load_module(
+    "draft_entry", os.path.join(SKILLS, "declarative-changelog", "scripts", "draft_entry.py")
 )
 
 
@@ -240,6 +245,126 @@ class WhatsnewCall(unittest.TestCase):
         code, _, err, _ = self.invoke(f"data: {json.dumps(reply)}\n")
         self.assertEqual(code, 1)
         self.assertIn("Invalid params", err)
+
+
+# The spec's release-heading grammar, for checking what the drafter prints.
+RELEASE_HEADING = re.compile(
+    r"^## (?:(?:\[[^\]]+\]\([^)]+\)|[^\[].*?) (?:—|–|-) )?"
+    r"\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))?"
+    r"(?: \((?:yanked|routine)(?:, (?:yanked|routine))*\))?$"
+)
+
+
+def log(*commits):
+    """draft_entry's stdin format from (subject, body) pairs."""
+    return "".join(f"{i:040x}\x1f{subject}\x1f{body}\x1e\n" for i, (subject, body) in enumerate(commits))
+
+
+def run_drafter(stdin, *argv):
+    out, err = io.StringIO(), io.StringIO()
+    with mock.patch("sys.stdin", io.StringIO(stdin)), redirect_stdout(out), redirect_stderr(err):
+        code = drafter.main(["--stdin", "--date", "2026-09-28", *argv])
+    return code, out.getvalue(), err.getvalue()
+
+
+def sections_of(entry):
+    """{category: [item lines]} from a drafted entry."""
+    found, current = {}, None
+    for line in entry.splitlines():
+        if line.startswith("### "):
+            current = found.setdefault(line[4:], [])
+        elif line.startswith("- ") and current is not None:
+            current.append(line[2:])
+    return found
+
+
+class DraftEntry(unittest.TestCase):
+    def test_the_recorded_history_drafts_a_categorized_entry(self):
+        code, out, err = run_drafter(fixture("git-log-declarative-changelog.txt"), "--previous", "0.1.0")
+        self.assertEqual(code, 0)
+        heading = out.splitlines()[0]
+        self.assertEqual(heading, "## 0.2.0 — 2026-09-28")
+        self.assertRegex(heading, RELEASE_HEADING)
+        sections = sections_of(out)
+        self.assertEqual(list(sections), ["Added", "Fixed"])
+        self.assertEqual(
+            sections["Fixed"],
+            ["**Breaking** — frontmatter: accept bare hex product.color and explain empty values"],
+        )
+        self.assertEqual(len(sections["Added"]), 3)
+        self.assertTrue(sections["Added"][0].startswith("**Breaking** — "))
+        self.assertEqual(sections["Added"][-1], "implement declarative changelog validator and parser")
+        self.assertIn("9 commits: 4 mapped, 5 hidden, 0 unclassified", err)
+        self.assertIn("hidden types: build, chore, ci, test", err)
+        self.assertIn("suggested bump: minor (0.1.0 → 0.2.0)", err)
+
+    def test_a_breaking_change_footer_becomes_the_items_detail(self):
+        _, out, _ = run_drafter(fixture("git-log-declarative-changelog.txt"))
+        self.assertIn(
+            "\n  parsed `product.color` no longer carries a leading `#`; "
+            "consumers expecting `#RRGGBB` now receive `RRGGBB`.\n",
+            out,
+        )
+
+    def test_every_type_lands_in_its_category_in_canonical_order(self):
+        stdin = log(
+            ("security: reject path traversal in archive names", ""),
+            ("remove: drop the legacy config loader", ""),
+            ("fix(cli): exit 2 on a missing file (#12)", ""),
+            ("deprecate: the --serial flag", ""),
+            ("perf: cache parsed headings", ""),
+            ('Revert "feat: add colour output"', ""),
+            ("feat: add --json output", ""),
+        )
+        _, out, _ = run_drafter(stdin)
+        sections = sections_of(out)
+        self.assertEqual(list(sections), list(drafter.CATEGORIES))
+        self.assertEqual(sections["Changed"], ["cache parsed headings", "Revert feat: add colour output"])
+        self.assertEqual(sections["Fixed"], ["cli: exit 2 on a missing file (#12)"])
+
+    def test_breaking_items_lead_their_section(self):
+        stdin = log(("feat: add --json output", ""), ("feat!: drop Node 18", ""))
+        _, out, err = run_drafter(stdin, "--previous", "v1.4.2")
+        self.assertEqual(sections_of(out)["Added"], ["**Breaking** — drop Node 18", "add --json output"])
+        self.assertTrue(out.startswith("## v2.0.0 — "))
+        self.assertIn("suggested bump: major (v1.4.2 → v2.0.0)", err)
+
+    def test_a_breaking_refactor_is_not_hidden(self):
+        stdin = log(("refactor(api): rename Client.get", "BREAKING CHANGE: use Client.fetch.\n"))
+        _, out, _ = run_drafter(stdin)
+        self.assertEqual(sections_of(out)["Changed"], ["**Breaking** — api: rename Client.get"])
+
+    def test_only_hidden_types_draft_a_routine_release(self):
+        stdin = log(("chore(deps): bump yaml", ""), ("ci: cache npm", ""))
+        _, out, err = run_drafter(stdin, "--previous", "1.2.3", "--url", "https://x.example/r/v{version}")
+        heading = out.splitlines()[0]
+        self.assertEqual(heading, "## [1.2.4](https://x.example/r/v1.2.4) — 2026-09-28 (routine)")
+        self.assertRegex(heading, RELEASE_HEADING)
+        self.assertNotIn("### ", out)
+        self.assertIn("nothing reader-facing", err)
+
+    def test_unconventional_subjects_are_reported_not_dropped(self):
+        stdin = log(("Update README", ""), ("wip: try things", ""), ("fix: typo in help", ""))
+        _, out, err = run_drafter(stdin)
+        self.assertEqual(sections_of(out), {"Fixed": ["typo in help"]})
+        self.assertIn("unclassified: 0000000 Update README", err)
+        self.assertIn("wip: try things", err)
+
+    def test_without_a_version_the_heading_is_date_only(self):
+        _, out, err = run_drafter(log(("fix: typo", "")))
+        self.assertEqual(out.splitlines()[0], "## 2026-09-28")
+        self.assertIn("pass --version", err)
+
+    def test_zero_major_breaking_bumps_the_minor(self):
+        _, out, _ = run_drafter(log(("feat!: new heading grammar", "")), "--previous", "0.4.1")
+        self.assertTrue(out.startswith("## 0.5.0 — "))
+
+    def test_a_bad_git_range_exits_two(self):
+        err = io.StringIO()
+        with redirect_stderr(err), redirect_stdout(io.StringIO()):
+            code = drafter.main(["--since", "no-such-ref-anywhere", "--until", "no-such-ref-either"])
+        self.assertEqual(code, 2)
+        self.assertIn("draft_entry:", err.getvalue())
 
 
 if __name__ == "__main__":
