@@ -5,7 +5,8 @@ install for the checks except the Claude Code CLI and Node for `npx`.
 
 ## Finishing checks
 
-A change is finished when all of these pass. CI runs the first four.
+A change is finished when all of these pass. CI runs the first four, in both
+`.github/workflows/ci.yml` and `.gitlab-ci.yml`; keep the two in step.
 
 ```sh
 python3 -m unittest discover -s tests                 # the skills' scripts
@@ -17,8 +18,8 @@ npx -y declarative-changelog@0.1 validate CHANGELOG.md --require-level 2 --max-w
 
 `.claude/hooks/lintorama-stop.sh` runs the `zaventh/lintorama` container (shellcheck,
 markdownlint, yamllint, actionlint) as a Stop hook and blocks the turn until its
-findings are fixed; it no-ops without Docker. CI's `lintorama` job runs the same
-image and fails the build on any finding. Config: `.mdlrc` (relaxed; MD029 off
+findings are fixed; it no-ops without Docker. Both CIs' `lintorama` jobs run the same
+image and fail the build on any finding. Config: `.mdlrc` (relaxed; MD029 off
 because step numbering is intentional) and `.yamllint` (relaxed, no line-length).
 Run it by hand with:
 
