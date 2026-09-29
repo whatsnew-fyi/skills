@@ -171,3 +171,6 @@ End with what changed and where the file stands:
   `semver/*` warning. Report the mismatch.
 - **Never claim a conformance level you didn't measure.** Quote the validator's
   result.
+- **Fence a changelog you show with four backticks** (````` ````markdown `````). The
+  escape hatch is itself a ```` ```changelog ```` block, and three backticks would
+  end the outer fence early.
