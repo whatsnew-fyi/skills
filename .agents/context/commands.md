@@ -15,6 +15,16 @@ python3 scripts/adr.py index --check                   # decisions router is cur
 npx -y declarative-changelog@0.1 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
+`.claude/hooks/lintorama-stop.sh` runs the `zaventh/lintorama` container (shellcheck,
+markdownlint, yamllint, actionlint) as a Stop hook and blocks the turn until its
+findings are fixed; it no-ops without Docker. Config: `.mdlrc` (relaxed; MD029 off
+because step numbering is intentional) and `.yamllint` (relaxed, no line-length).
+Run it by hand with:
+
+```sh
+docker run --rm -v "$PWD":/code -v "$PWD"/.git:/code/.git zaventh/lintorama:6
+```
+
 The evals are the fifth check, run by hand because they call the model and cost
 money. Run them after any change to a `SKILL.md`, and especially to a
 `description`:
