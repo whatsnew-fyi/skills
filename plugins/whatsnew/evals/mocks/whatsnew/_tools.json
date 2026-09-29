@@ -1,0 +1,1988 @@
+{
+ "tools": [
+  {
+   "name": "list_products",
+   "title": "List tracked products",
+   "description": "The products What's New tracks release notes for, with slugs, categories and platforms. Filter by category and/or a name query.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "category": {
+      "type": "string",
+      "enum": [
+       "Developer Tools",
+       "Frameworks & Libraries",
+       "Languages & Runtimes",
+       "Infrastructure & DevOps",
+       "Databases & Data",
+       "Security & Privacy",
+       "Games",
+       "Gaming Tools",
+       "Operating Systems",
+       "System Utilities",
+       "Browsers",
+       "Communication",
+       "Media",
+       "Creative Tools",
+       "AI",
+       "Productivity",
+       "Lifestyle & Apps",
+       "Firmware",
+       "Drivers"
+      ],
+      "description": "Limit results to one product category."
+     },
+     "query": {
+      "description": "Filter by name, e.g. \"terminal\" or \"jetbrains\".",
+      "type": "string",
+      "maxLength": 64
+     },
+     "sort": {
+      "description": "\"popular\" ranks by current audience popularity — outside signals (stars, downloads, players) blended with this site's own readers — and answers \"what are the most popular software right now?\". Default is the curated catalog order (or search relevance when query is set, which ignores sort).",
+      "type": "string",
+      "enum": [
+       "curated",
+       "popular"
+      ]
+     }
+    }
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   },
+   "outputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+     "total": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991,
+      "description": "Matches before the cap."
+     },
+     "returned": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+     },
+     "truncated": {
+      "type": "boolean",
+      "const": true
+     },
+     "products": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "slug": {
+         "type": "string"
+        },
+        "name": {
+         "type": "string"
+        },
+        "vendor": {
+         "type": "string"
+        },
+        "category": {
+         "type": "string",
+         "enum": [
+          "Developer Tools",
+          "Frameworks & Libraries",
+          "Languages & Runtimes",
+          "Infrastructure & DevOps",
+          "Databases & Data",
+          "Security & Privacy",
+          "Games",
+          "Gaming Tools",
+          "Operating Systems",
+          "System Utilities",
+          "Browsers",
+          "Communication",
+          "Media",
+          "Creative Tools",
+          "AI",
+          "Productivity",
+          "Lifestyle & Apps",
+          "Firmware",
+          "Drivers"
+         ]
+        },
+        "description": {
+         "type": "string"
+        },
+        "url": {
+         "type": "string",
+         "description": "This product's page on What's New."
+        },
+        "homepage": {
+         "type": "string",
+         "description": "The vendor's own site."
+        },
+        "platforms": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "labels": {
+         "description": "Provenance to keep with any quote, e.g. “Sample data”.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "license": {
+         "description": "SPDX expression as the product's own source states it, e.g. MIT or LicenseRef-proprietary; absent when unknown.",
+         "type": "string"
+        },
+        "language": {
+         "type": "string"
+        },
+        "archived": {
+         "description": "Whether the upstream repository is archived; absent when unknown.",
+         "type": "boolean"
+        }
+       },
+       "required": [
+        "slug",
+        "name",
+        "vendor",
+        "category",
+        "description",
+        "url",
+        "homepage"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "required": [
+     "total",
+     "returned",
+     "products"
+    ],
+    "additionalProperties": false
+   }
+  },
+  {
+   "name": "search_releases",
+   "title": "Search products and release notes",
+   "description": "Full-catalog search across product names and release history. Returns matching products and releases with permalinks.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "query": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Search products and release notes. At least 2 characters."
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "Developer Tools",
+       "Frameworks & Libraries",
+       "Languages & Runtimes",
+       "Infrastructure & DevOps",
+       "Databases & Data",
+       "Security & Privacy",
+       "Games",
+       "Gaming Tools",
+       "Operating Systems",
+       "System Utilities",
+       "Browsers",
+       "Communication",
+       "Media",
+       "Creative Tools",
+       "AI",
+       "Productivity",
+       "Lifestyle & Apps",
+       "Firmware",
+       "Drivers"
+      ],
+      "description": "Limit results to one product category."
+     }
+    },
+    "required": [
+     "query"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   },
+   "outputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "description": "The query as searched — trimmed and capped."
+     },
+     "category": {
+      "type": "string",
+      "enum": [
+       "Developer Tools",
+       "Frameworks & Libraries",
+       "Languages & Runtimes",
+       "Infrastructure & DevOps",
+       "Databases & Data",
+       "Security & Privacy",
+       "Games",
+       "Gaming Tools",
+       "Operating Systems",
+       "System Utilities",
+       "Browsers",
+       "Communication",
+       "Media",
+       "Creative Tools",
+       "AI",
+       "Productivity",
+       "Lifestyle & Apps",
+       "Firmware",
+       "Drivers"
+      ],
+      "description": "Limit results to one product category."
+     },
+     "products": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "slug": {
+         "type": "string"
+        },
+        "name": {
+         "type": "string"
+        },
+        "vendor": {
+         "type": "string"
+        },
+        "category": {
+         "type": "string",
+         "enum": [
+          "Developer Tools",
+          "Frameworks & Libraries",
+          "Languages & Runtimes",
+          "Infrastructure & DevOps",
+          "Databases & Data",
+          "Security & Privacy",
+          "Games",
+          "Gaming Tools",
+          "Operating Systems",
+          "System Utilities",
+          "Browsers",
+          "Communication",
+          "Media",
+          "Creative Tools",
+          "AI",
+          "Productivity",
+          "Lifestyle & Apps",
+          "Firmware",
+          "Drivers"
+         ]
+        },
+        "description": {
+         "type": "string"
+        },
+        "url": {
+         "type": "string",
+         "description": "This product's page on What's New."
+        },
+        "homepage": {
+         "type": "string",
+         "description": "The vendor's own site."
+        },
+        "platforms": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "labels": {
+         "description": "Provenance to keep with any quote, e.g. “Sample data”.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "license": {
+         "description": "SPDX expression as the product's own source states it, e.g. MIT or LicenseRef-proprietary; absent when unknown.",
+         "type": "string"
+        },
+        "language": {
+         "type": "string"
+        },
+        "archived": {
+         "description": "Whether the upstream repository is archived; absent when unknown.",
+         "type": "boolean"
+        }
+       },
+       "required": [
+        "slug",
+        "name",
+        "vendor",
+        "category",
+        "description",
+        "url",
+        "homepage"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "releases": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "version": {
+         "type": "string"
+        },
+        "title": {
+         "type": "string"
+        },
+        "date": {
+         "type": "string",
+         "description": "ISO 8601 timestamp."
+        },
+        "url": {
+         "type": "string",
+         "description": "This release's page on What's New."
+        },
+        "sourceUrl": {
+         "type": "string",
+         "description": "The vendor's own release notes."
+        },
+        "prerelease": {
+         "type": "boolean",
+         "const": true
+        },
+        "channel": {
+         "description": "The source's own classification, e.g. “longterm”.",
+         "type": "string"
+        },
+        "changes": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "category": {
+            "type": "string",
+            "enum": [
+             "added",
+             "changed",
+             "fixed",
+             "removed",
+             "deprecated",
+             "security"
+            ]
+           },
+           "text": {
+            "type": "string"
+           }
+          },
+          "required": [
+           "category",
+           "text"
+          ],
+          "additionalProperties": false
+         }
+        },
+        "labels": {
+         "description": "Provenance to keep with any quote, e.g. “Pre-release”.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "product": {
+         "type": "object",
+         "properties": {
+          "slug": {
+           "type": "string"
+          },
+          "name": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "slug",
+          "name"
+         ],
+         "additionalProperties": false
+        },
+        "summary": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "title",
+        "date",
+        "url",
+        "sourceUrl",
+        "product"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "note": {
+      "description": "Present when nothing matched.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "query",
+     "products",
+     "releases"
+    ],
+    "additionalProperties": false
+   }
+  },
+  {
+   "name": "whats_new",
+   "title": "What changed in a product",
+   "description": "A product's newest releases with notes. Pass since_version (the version you run) to get only what shipped after it, with per-category change counts.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "product": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Product slug or name, e.g. \"next-js\" or \"Next.js\"."
+     },
+     "since_version": {
+      "description": "The version you run. Returns only the releases above it in the history, matched exactly or as the same version spelled with fewer trailing zeros. A version we do not hold is reported as a miss rather than guessed into an ordering.",
+      "type": "string",
+      "maxLength": 100
+     },
+     "limit": {
+      "description": "Releases to return, default 10.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 25
+     }
+    },
+    "required": [
+     "product"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": false
+   },
+   "outputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+     "product": {
+      "type": "object",
+      "properties": {
+       "slug": {
+        "type": "string"
+       },
+       "name": {
+        "type": "string"
+       },
+       "vendor": {
+        "type": "string"
+       },
+       "category": {
+        "type": "string",
+        "enum": [
+         "Developer Tools",
+         "Frameworks & Libraries",
+         "Languages & Runtimes",
+         "Infrastructure & DevOps",
+         "Databases & Data",
+         "Security & Privacy",
+         "Games",
+         "Gaming Tools",
+         "Operating Systems",
+         "System Utilities",
+         "Browsers",
+         "Communication",
+         "Media",
+         "Creative Tools",
+         "AI",
+         "Productivity",
+         "Lifestyle & Apps",
+         "Firmware",
+         "Drivers"
+        ]
+       },
+       "description": {
+        "type": "string"
+       },
+       "url": {
+        "type": "string",
+        "description": "This product's page on What's New."
+       },
+       "homepage": {
+        "type": "string",
+        "description": "The vendor's own site."
+       },
+       "platforms": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "labels": {
+        "description": "Provenance to keep with any quote, e.g. “Sample data”.",
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "license": {
+        "description": "SPDX expression as the product's own source states it, e.g. MIT or LicenseRef-proprietary; absent when unknown.",
+        "type": "string"
+       },
+       "language": {
+        "type": "string"
+       },
+       "archived": {
+        "description": "Whether the upstream repository is archived; absent when unknown.",
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "slug",
+       "name",
+       "vendor",
+       "category",
+       "description",
+       "url",
+       "homepage"
+      ],
+      "additionalProperties": false
+     },
+     "sinceVersion": {
+      "description": "The version you passed.",
+      "type": "string"
+     },
+     "sinceVersionFound": {
+      "description": "Whether that version was found in the history. False means the releases below are the latest, not the ones after yours.",
+      "type": "boolean"
+     },
+     "newerCount": {
+      "description": "Releases above the pinned version, before the limit.",
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+     },
+     "changeCounts": {
+      "description": "Change items across the whole span, even when truncated.",
+      "type": "object",
+      "propertyNames": {
+       "type": "string",
+       "enum": [
+        "added",
+        "changed",
+        "fixed",
+        "removed",
+        "deprecated",
+        "security"
+       ]
+      },
+      "additionalProperties": {
+       "type": "integer",
+       "minimum": -9007199254740991,
+       "maximum": 9007199254740991
+      }
+     },
+     "returned": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+     },
+     "truncated": {
+      "type": "boolean",
+      "const": true
+     },
+     "notes": {
+      "description": "How the product or the version was resolved.",
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "releases": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "version": {
+         "type": "string"
+        },
+        "title": {
+         "type": "string"
+        },
+        "date": {
+         "type": "string",
+         "description": "ISO 8601 timestamp."
+        },
+        "url": {
+         "type": "string",
+         "description": "This release's page on What's New."
+        },
+        "sourceUrl": {
+         "type": "string",
+         "description": "The vendor's own release notes."
+        },
+        "prerelease": {
+         "type": "boolean",
+         "const": true
+        },
+        "channel": {
+         "description": "The source's own classification, e.g. “longterm”.",
+         "type": "string"
+        },
+        "changes": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "category": {
+            "type": "string",
+            "enum": [
+             "added",
+             "changed",
+             "fixed",
+             "removed",
+             "deprecated",
+             "security"
+            ]
+           },
+           "text": {
+            "type": "string"
+           }
+          },
+          "required": [
+           "category",
+           "text"
+          ],
+          "additionalProperties": false
+         }
+        },
+        "labels": {
+         "description": "Provenance to keep with any quote, e.g. “Pre-release”.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "summary": {
+         "type": "string"
+        },
+        "body": {
+         "type": "string"
+        },
+        "bodyTruncated": {
+         "description": "The body was cut at the cap; the permalink has it all.",
+         "type": "boolean",
+         "const": true
+        }
+       },
+       "required": [
+        "title",
+        "date",
+        "url",
+        "sourceUrl"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "required": [
+     "product",
+     "returned",
+     "releases"
+    ],
+    "additionalProperties": false
+   }
+  },
+  {
+   "name": "upgrade_notes",
+   "title": "Review a dependency upgrade",
+   "description": "Before or after upgrading dependencies — package.json / lockfile / requirements changes, npm update, pip install -U, a Gradle version catalog, go.mod, a workflow's actions — pass each package with the version you run and the version you are moving to. Returns every tracked release in between with the vendor's own breaking-change, deprecation, migration and security sections verbatim, the categorized change list, CVE ids and deterministic signals (major bump, removed/deprecated items, breaking mentions) — including breaking changes shipped in minor or patch versions. Pass repository (from the package's own package.json) for scoped or renamed packages; it makes the match exact. A Maven/Gradle, Go, NuGet or GitHub Actions package goes by its purl (e.g. pkg:maven/com.squareup.okhttp3/okhttp), or by its own coordinate as the name (group:artifact, a module path, owner/repo@ref), and is matched exactly or not at all. A Maven, Go or NuGet package this server does not track is checked against deps.dev after the answer and counted, to decide what to track next; pass recordMisses: false for private packages.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "dependencies": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 214,
+         "description": "The package as its ecosystem spells it: \"better-auth\", \"@tanstack/react-query\", a Maven \"group:artifact\", a Go module path, or an Action's \"owner/repo@ref\"."
+        },
+        "purl": {
+         "description": "The package as a purl (package URL), e.g. \"pkg:maven/com.squareup.okhttp3/okhttp\", \"pkg:golang/github.com/spf13/cobra\" or \"pkg:nuget/Newtonsoft.Json\" — what an SBOM, OSV or Renovate already names it by. Takes precedence over name and registry; a version inside it is ignored in favour of the versions passed beside it.",
+         "type": "string",
+         "maxLength": 300,
+         "pattern": "^[Pp][Kk][Gg]:"
+        },
+        "from": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100,
+         "description": "The version installed now — a version, not a range: read it from the lockfile."
+        },
+        "to": {
+         "description": "The version being moved to. Omit for everything after `from` that is tracked.",
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100
+        },
+        "registry": {
+         "description": "Default npm — unless purl, or the name's own shape (group:artifact, a Go module path), says otherwise.",
+         "type": "string",
+         "enum": [
+          "npm",
+          "pypi",
+          "crates",
+          "rubygems"
+         ]
+        },
+        "repository": {
+         "description": "The package's source repository — its package.json `repository`, or the repo a Maven or NuGet package is built from (any GitHub URL, github:owner/repo or owner/repo). Resolves scoped and renamed packages the name alone cannot, and makes the match exact.",
+         "type": "string",
+         "maxLength": 300
+        }
+       },
+       "required": [
+        "name",
+        "from"
+       ]
+      },
+      "description": "Up to 20 per call; split a larger upgrade."
+     },
+     "recordMisses": {
+      "description": "Default true. A Maven, Go or NuGet package this server does not track is checked against deps.dev after the answer and counted per day, with nothing about the caller, to decide what to track next. Pass false for private packages.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "dependencies"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true
+   },
+   "outputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+     "dependencies": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string"
+        },
+        "registry": {
+         "description": "The registry, when the package is in one of these four; absent for a Maven, Go, NuGet or Actions package.",
+         "type": "string",
+         "enum": [
+          "npm",
+          "pypi",
+          "crates",
+          "rubygems"
+         ]
+        },
+        "purl": {
+         "description": "The package as a versionless purl, as it was matched.",
+         "type": "string"
+        },
+        "from": {
+         "type": "string"
+        },
+        "to": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "ok",
+          "untracked",
+          "unreadable",
+          "unversioned",
+          "unplaceable",
+          "same",
+          "reversed",
+          "unorderable"
+         ],
+         "description": "ok answers; untracked is not in the catalog; unreadable is a from/to the version grammar cannot read (a range is not a version); the rest name why the pair has no interval."
+        },
+        "notes": {
+         "description": "How the package and its versions were resolved, and what was cut.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "match": {
+         "type": "object",
+         "properties": {
+          "slug": {
+           "type": "string"
+          },
+          "name": {
+           "type": "string"
+          },
+          "vendor": {
+           "type": "string"
+          },
+          "url": {
+           "type": "string",
+           "description": "The product's page on What's New."
+          },
+          "tier": {
+           "type": "string",
+           "enum": [
+            "identifier",
+            "namespace",
+            "name"
+           ],
+           "description": "identifier: a registry id, a purl or a repository the catalog tracks. namespace: the package sits under a namespace the product claims (a Maven group, say) — the notes are the family's. name: a name-only guess — check the product before trusting it, and pass purl or repository to make it exact."
+          },
+          "matchedKey": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "slug",
+          "name",
+          "vendor",
+          "url",
+          "tier",
+          "matchedKey"
+         ],
+         "additionalProperties": false
+        },
+        "interval": {
+         "type": "object",
+         "properties": {
+          "from": {
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "to": {
+           "description": "Absent when the call named no `to`.",
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "releases": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Releases numbered inside the interval."
+          },
+          "unordered": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Rows the comparator could not place against it."
+          },
+          "truncated": {
+           "description": "`from` sits below the history we hold, so `releases` is a lower bound.",
+           "type": "boolean",
+           "const": true
+          },
+          "ahead": {
+           "description": "`from` is newer than anything we track.",
+           "type": "boolean",
+           "const": true
+          },
+          "oldest": {
+           "description": "The oldest version we hold.",
+           "type": "string"
+          },
+          "newest": {
+           "description": "The newest version we hold.",
+           "type": "string"
+          }
+         },
+         "required": [
+          "from",
+          "releases",
+          "unordered"
+         ],
+         "additionalProperties": false
+        },
+        "signals": {
+         "description": "Deterministic, over every release in the interval: a SemVer major bump, Keep a Changelog removed/deprecated/security items, the vendor's literal “breaking” wording, CVE ids. No model judged anything.",
+         "type": "object",
+         "properties": {
+          "majorBump": {
+           "type": "boolean"
+          },
+          "breakingMentions": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991
+          },
+          "removed": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991
+          },
+          "deprecated": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991
+          },
+          "security": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991
+          },
+          "cves": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          }
+         },
+         "required": [
+          "majorBump",
+          "breakingMentions",
+          "removed",
+          "deprecated",
+          "security",
+          "cves"
+         ],
+         "additionalProperties": false
+        },
+        "changes": {
+         "description": "Every categorized change across the interval, merged across releases, removed/deprecated/security first.",
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "category": {
+            "type": "string",
+            "enum": [
+             "added",
+             "changed",
+             "fixed",
+             "removed",
+             "deprecated",
+             "security"
+            ]
+           },
+           "items": {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "properties": {
+              "text": {
+               "type": "string"
+              },
+              "versions": {
+               "type": "array",
+               "items": {
+                "type": "string"
+               },
+               "description": "The versions that shipped it, newest first — several when a fix landed on more than one branch."
+              },
+              "synthesized": {
+               "description": "Summarized from commit messages because the vendor published no notes.",
+               "type": "boolean",
+               "const": true
+              }
+             },
+             "required": [
+              "text",
+              "versions"
+             ],
+             "additionalProperties": false
+            }
+           }
+          },
+          "required": [
+           "category",
+           "items"
+          ],
+          "additionalProperties": false
+         }
+        },
+        "changesTruncated": {
+         "type": "boolean",
+         "const": true
+        },
+        "uncategorized": {
+         "description": "Versions in the interval with no categorized changes.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "releases": {
+         "description": "Newest first.",
+         "type": "array",
+         "items": {
+          "type": "object",
+          "properties": {
+           "version": {
+            "type": "string"
+           },
+           "title": {
+            "type": "string"
+           },
+           "date": {
+            "type": "string",
+            "description": "ISO 8601 timestamp."
+           },
+           "url": {
+            "type": "string",
+            "description": "This release's page on What's New."
+           },
+           "sourceUrl": {
+            "description": "The vendor's own release notes; present when the notes were read.",
+            "type": "string"
+           },
+           "labels": {
+            "description": "Provenance to keep with any quote, e.g. “Sample data”.",
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           },
+           "breakingMention": {
+            "description": "The vendor's own words say “breaking change”.",
+            "type": "boolean",
+            "const": true
+           },
+           "removed": {
+            "type": "boolean",
+            "const": true
+           },
+           "deprecated": {
+            "type": "boolean",
+            "const": true
+           },
+           "security": {
+            "type": "boolean",
+            "const": true
+           },
+           "cveIds": {
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           },
+           "sections": {
+            "description": "What the vendor filed under its own breaking / security / deprecation / migration headings.",
+            "type": "array",
+            "items": {
+             "type": "object",
+             "properties": {
+              "key": {
+               "type": "string",
+               "enum": [
+                "breaking",
+                "security",
+                "deprecated",
+                "migration"
+               ]
+              },
+              "heading": {
+               "type": "string"
+              },
+              "under": {
+               "description": "The heading this section sits under — in a monorepo's release note, the package it is about.",
+               "type": "string"
+              },
+              "text": {
+               "type": "string",
+               "description": "Verbatim from the vendor's notes."
+              },
+              "truncated": {
+               "description": "Cut at the cap; the release's permalink has it whole.",
+               "type": "boolean",
+               "const": true
+              }
+             },
+             "required": [
+              "key",
+              "heading",
+              "text"
+             ],
+             "additionalProperties": false
+            }
+           },
+           "sectionsOmitted": {
+            "description": "A budget cut a section or left one out; the permalink has them all.",
+            "type": "boolean",
+            "const": true
+           },
+           "notesOmitted": {
+            "description": "Past the per-call body budget: listed by version only; the permalink has the notes.",
+            "type": "boolean",
+            "const": true
+           }
+          },
+          "required": [
+           "version",
+           "title",
+           "date",
+           "url"
+          ],
+          "additionalProperties": false
+         }
+        },
+        "compareUrl": {
+         "description": "The interval as one page on What's New.",
+         "type": "string"
+        },
+        "compareMarkdownUrl": {
+         "description": "The same interval as markdown, with every release's notes.",
+         "type": "string"
+        }
+       },
+       "required": [
+        "name",
+        "from",
+        "status"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "notes": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    },
+    "required": [
+     "dependencies"
+    ],
+    "additionalProperties": false
+   }
+  },
+  {
+   "name": "missing_changes",
+   "title": "What an outdated project is missing",
+   "description": "For a whole project's outdated report — npm/pnpm outdated --json (current → from, wanted, latest), ncu --format installedVersion, pip or uv pip list --outdated --format json (version → from, latest_version → latest), go list -m -u -json all (Version → from, Update.Version → latest), cargo outdated, dotnet list package --outdated, a Gradle versions report — pass each package with the version installed and, where the tool gives them, wanted and latest. Answers what the project is missing, most exposed first: per package, the security releases, CVE ids and fixes it does not have, split into toWanted (from → wanted: reachable by an update within the declared range, no manifest edit) and toLatest (→ latest: needs the range changed), with the cost of moving beside them (major bump, breaking mentions, removed/deprecated) and a few of the fixes themselves. Counts are deterministic over every tracked release; no model judged anything. Up to 100 packages a call. Pass repository (from the package's own package.json) for scoped or renamed packages; a Maven, Go or NuGet package goes by its purl. For the vendor's own breaking-change and migration sections, call upgrade_notes on the packages worth moving. A Maven, Go or NuGet package this server does not track is checked against deps.dev after the answer and counted; pass recordMisses: false for private packages.",
+   "inputSchema": {
+    "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "properties": {
+     "dependencies": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 214,
+         "description": "The package as its ecosystem spells it: \"better-auth\", \"@tanstack/react-query\", a Maven \"group:artifact\", a Go module path, or an Action's \"owner/repo@ref\"."
+        },
+        "purl": {
+         "description": "The package as a purl (package URL), e.g. \"pkg:maven/com.squareup.okhttp3/okhttp\", \"pkg:golang/github.com/spf13/cobra\" or \"pkg:nuget/Newtonsoft.Json\" — what an SBOM, OSV or Renovate already names it by. Takes precedence over name and registry; a version inside it is ignored in favour of the versions passed beside it.",
+         "type": "string",
+         "maxLength": 300,
+         "pattern": "^[Pp][Kk][Gg]:"
+        },
+        "registry": {
+         "description": "Default npm — unless purl, or the name's own shape (group:artifact, a Go module path), says otherwise.",
+         "type": "string",
+         "enum": [
+          "npm",
+          "pypi",
+          "crates",
+          "rubygems"
+         ]
+        },
+        "repository": {
+         "description": "The package's source repository — its package.json `repository`, or the repo a Maven or NuGet package is built from (any GitHub URL, github:owner/repo or owner/repo). Resolves scoped and renamed packages the name alone cannot, and makes the match exact.",
+         "type": "string",
+         "maxLength": 300
+        },
+        "from": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100,
+         "description": "The version installed now — a version, not a range: npm outdated's `current`, pip's `version`, go's `Version`."
+        },
+        "wanted": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100,
+         "description": "The greatest version the declared range admits — npm/pnpm outdated's `wanted`, what an update reaches without editing the manifest. Omit where the tool reports none."
+        },
+        "latest": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 100,
+         "description": "The newest version published — outdated's `latest`, pip's `latest_version`, go's `Update.Version`. Omit for everything tracked after `wanted` (or `from`)."
+        }
+       },
+       "required": [
+        "name",
+        "from"
+       ]
+      },
+      "description": "Up to 100 per call; split a larger project."
+     },
+     "recordMisses": {
+      "description": "Default true. A Maven, Go or NuGet package this server does not track is checked against deps.dev after the answer and counted per day, with nothing about the caller, to decide what to track next. Pass false for private packages.",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "dependencies"
+    ]
+   },
+   "annotations": {
+    "readOnlyHint": true,
+    "idempotentHint": true,
+    "openWorldHint": true
+   },
+   "outputSchema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+     "summary": {
+      "type": "object",
+      "properties": {
+       "dependencies": {
+        "type": "integer",
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991
+       },
+       "tracked": {
+        "type": "integer",
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991
+       },
+       "behindInRange": {
+        "type": "integer",
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991,
+        "description": "Dependencies with at least one release inside toWanted."
+       },
+       "withSecurity": {
+        "type": "integer",
+        "minimum": -9007199254740991,
+        "maximum": 9007199254740991,
+        "description": "Dependencies missing a security release or a CVE fix in either interval."
+       },
+       "cves": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      },
+      "required": [
+       "dependencies",
+       "tracked",
+       "behindInRange",
+       "withSecurity",
+       "cves"
+      ],
+      "additionalProperties": false
+     },
+     "dependencies": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string"
+        },
+        "registry": {
+         "type": "string",
+         "enum": [
+          "npm",
+          "pypi",
+          "crates",
+          "rubygems"
+         ]
+        },
+        "purl": {
+         "description": "The package as a versionless purl, as it was matched.",
+         "type": "string"
+        },
+        "from": {
+         "type": "string"
+        },
+        "wanted": {
+         "type": "string"
+        },
+        "latest": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "ok",
+          "untracked"
+         ],
+         "description": "untracked is not in the catalog."
+        },
+        "notes": {
+         "description": "How the package was resolved.",
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "match": {
+         "type": "object",
+         "properties": {
+          "slug": {
+           "type": "string"
+          },
+          "name": {
+           "type": "string"
+          },
+          "vendor": {
+           "type": "string"
+          },
+          "url": {
+           "type": "string",
+           "description": "The product's page on What's New."
+          },
+          "tier": {
+           "type": "string",
+           "enum": [
+            "identifier",
+            "namespace",
+            "name"
+           ],
+           "description": "identifier: a registry id, a purl or a repository the catalog tracks. namespace: the package sits under a namespace the product claims (a Maven group, say) — the notes are the family's. name: a name-only guess — check the product before trusting it, and pass purl or repository to make it exact."
+          },
+          "matchedKey": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "slug",
+          "name",
+          "vendor",
+          "url",
+          "tier",
+          "matchedKey"
+         ],
+         "additionalProperties": false
+        },
+        "toWanted": {
+         "description": "from → wanted: what an update within the declared range would bring. Present when wanted was passed.",
+         "type": "object",
+         "properties": {
+          "from": {
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "to": {
+           "description": "Absent when the interval runs to the newest we track.",
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "status": {
+           "type": "string",
+           "enum": [
+            "ok",
+            "unversioned",
+            "unreadable",
+            "unplaceable",
+            "same",
+            "reversed",
+            "unorderable"
+           ],
+           "description": "ok answers; unreadable is a version the grammar cannot read (a range is not a version); unversioned is a source whose notes carry no numbers; the rest name why the pair has no interval."
+          },
+          "releases": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Releases numbered inside the interval."
+          },
+          "unordered": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Rows the comparator could not place against it."
+          },
+          "truncated": {
+           "description": "`from` sits below the history we hold, so every count is a lower bound.",
+           "type": "boolean",
+           "const": true
+          },
+          "ahead": {
+           "description": "`from` is newer than anything we track.",
+           "type": "boolean",
+           "const": true
+          },
+          "gain": {
+           "description": "What the project is missing, counted over every release in the interval.",
+           "type": "object",
+           "properties": {
+            "security": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases carrying a security change."
+            },
+            "fixed": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases carrying a fix."
+            },
+            "cves": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            "uncategorized": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases with no categorized changes — not enriched, or notes that yielded none; they may hold fixes the counts miss."
+            }
+           },
+           "required": [
+            "security",
+            "fixed",
+            "cves",
+            "uncategorized"
+           ],
+           "additionalProperties": false
+          },
+          "cost": {
+           "description": "What moving would cost — deterministic signals, no model's reading. upgrade_notes has the vendor's own breaking and migration sections.",
+           "type": "object",
+           "properties": {
+            "majorBump": {
+             "type": "boolean"
+            },
+            "breakingMentions": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases whose notes say “breaking change”."
+            },
+            "removed": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991
+            },
+            "deprecated": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991
+            }
+           },
+           "required": [
+            "majorBump",
+            "breakingMentions",
+            "removed",
+            "deprecated"
+           ],
+           "additionalProperties": false
+          },
+          "items": {
+           "description": "A sample of the changes themselves, security first.",
+           "type": "object",
+           "properties": {
+            "security": {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "properties": {
+               "text": {
+                "type": "string"
+               },
+               "versions": {
+                "type": "array",
+                "items": {
+                 "type": "string"
+                },
+                "description": "The versions that shipped it, newest first."
+               },
+               "synthesized": {
+                "description": "Summarized from commit messages because the vendor published no notes.",
+                "type": "boolean",
+                "const": true
+               },
+               "truncated": {
+                "description": "Cut at the cap; the release's page has it whole.",
+                "type": "boolean",
+                "const": true
+               }
+              },
+              "required": [
+               "text",
+               "versions"
+              ],
+              "additionalProperties": false
+             }
+            },
+            "fixed": {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "properties": {
+               "text": {
+                "type": "string"
+               },
+               "versions": {
+                "type": "array",
+                "items": {
+                 "type": "string"
+                },
+                "description": "The versions that shipped it, newest first."
+               },
+               "synthesized": {
+                "description": "Summarized from commit messages because the vendor published no notes.",
+                "type": "boolean",
+                "const": true
+               },
+               "truncated": {
+                "description": "Cut at the cap; the release's page has it whole.",
+                "type": "boolean",
+                "const": true
+               }
+              },
+              "required": [
+               "text",
+               "versions"
+              ],
+              "additionalProperties": false
+             }
+            }
+           },
+           "required": [
+            "security",
+            "fixed"
+           ],
+           "additionalProperties": false
+          },
+          "itemsTruncated": {
+           "description": "More security or fixed items exist than are listed; compareUrl or upgrade_notes has them all.",
+           "type": "boolean",
+           "const": true
+          },
+          "notes": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          },
+          "compareUrl": {
+           "description": "The interval as one page on What's New.",
+           "type": "string"
+          },
+          "compareMarkdownUrl": {
+           "description": "The same interval as markdown, with every release's notes.",
+           "type": "string"
+          }
+         },
+         "required": [
+          "from",
+          "status",
+          "releases",
+          "unordered"
+         ],
+         "additionalProperties": false
+        },
+        "toLatest": {
+         "description": "wanted (or from) → latest: what needs the range changed. Absent when wanted was passed without latest, or equals it.",
+         "type": "object",
+         "properties": {
+          "from": {
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "to": {
+           "description": "Absent when the interval runs to the newest we track.",
+           "type": "object",
+           "properties": {
+            "label": {
+             "type": "string"
+            },
+            "tracked": {
+             "type": "boolean",
+             "description": "Whether this exact version is in the history we hold."
+            },
+            "date": {
+             "description": "ISO 8601, when tracked.",
+             "type": "string"
+            },
+            "url": {
+             "description": "The release's page here, when tracked.",
+             "type": "string"
+            }
+           },
+           "required": [
+            "label",
+            "tracked"
+           ],
+           "additionalProperties": false
+          },
+          "status": {
+           "type": "string",
+           "enum": [
+            "ok",
+            "unversioned",
+            "unreadable",
+            "unplaceable",
+            "same",
+            "reversed",
+            "unorderable"
+           ],
+           "description": "ok answers; unreadable is a version the grammar cannot read (a range is not a version); unversioned is a source whose notes carry no numbers; the rest name why the pair has no interval."
+          },
+          "releases": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Releases numbered inside the interval."
+          },
+          "unordered": {
+           "type": "integer",
+           "minimum": -9007199254740991,
+           "maximum": 9007199254740991,
+           "description": "Rows the comparator could not place against it."
+          },
+          "truncated": {
+           "description": "`from` sits below the history we hold, so every count is a lower bound.",
+           "type": "boolean",
+           "const": true
+          },
+          "ahead": {
+           "description": "`from` is newer than anything we track.",
+           "type": "boolean",
+           "const": true
+          },
+          "gain": {
+           "description": "What the project is missing, counted over every release in the interval.",
+           "type": "object",
+           "properties": {
+            "security": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases carrying a security change."
+            },
+            "fixed": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases carrying a fix."
+            },
+            "cves": {
+             "type": "array",
+             "items": {
+              "type": "string"
+             }
+            },
+            "uncategorized": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases with no categorized changes — not enriched, or notes that yielded none; they may hold fixes the counts miss."
+            }
+           },
+           "required": [
+            "security",
+            "fixed",
+            "cves",
+            "uncategorized"
+           ],
+           "additionalProperties": false
+          },
+          "cost": {
+           "description": "What moving would cost — deterministic signals, no model's reading. upgrade_notes has the vendor's own breaking and migration sections.",
+           "type": "object",
+           "properties": {
+            "majorBump": {
+             "type": "boolean"
+            },
+            "breakingMentions": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991,
+             "description": "Releases whose notes say “breaking change”."
+            },
+            "removed": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991
+            },
+            "deprecated": {
+             "type": "integer",
+             "minimum": -9007199254740991,
+             "maximum": 9007199254740991
+            }
+           },
+           "required": [
+            "majorBump",
+            "breakingMentions",
+            "removed",
+            "deprecated"
+           ],
+           "additionalProperties": false
+          },
+          "items": {
+           "description": "A sample of the changes themselves, security first.",
+           "type": "object",
+           "properties": {
+            "security": {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "properties": {
+               "text": {
+                "type": "string"
+               },
+               "versions": {
+                "type": "array",
+                "items": {
+                 "type": "string"
+                },
+                "description": "The versions that shipped it, newest first."
+               },
+               "synthesized": {
+                "description": "Summarized from commit messages because the vendor published no notes.",
+                "type": "boolean",
+                "const": true
+               },
+               "truncated": {
+                "description": "Cut at the cap; the release's page has it whole.",
+                "type": "boolean",
+                "const": true
+               }
+              },
+              "required": [
+               "text",
+               "versions"
+              ],
+              "additionalProperties": false
+             }
+            },
+            "fixed": {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "properties": {
+               "text": {
+                "type": "string"
+               },
+               "versions": {
+                "type": "array",
+                "items": {
+                 "type": "string"
+                },
+                "description": "The versions that shipped it, newest first."
+               },
+               "synthesized": {
+                "description": "Summarized from commit messages because the vendor published no notes.",
+                "type": "boolean",
+                "const": true
+               },
+               "truncated": {
+                "description": "Cut at the cap; the release's page has it whole.",
+                "type": "boolean",
+                "const": true
+               }
+              },
+              "required": [
+               "text",
+               "versions"
+              ],
+              "additionalProperties": false
+             }
+            }
+           },
+           "required": [
+            "security",
+            "fixed"
+           ],
+           "additionalProperties": false
+          },
+          "itemsTruncated": {
+           "description": "More security or fixed items exist than are listed; compareUrl or upgrade_notes has them all.",
+           "type": "boolean",
+           "const": true
+          },
+          "notes": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           }
+          },
+          "compareUrl": {
+           "description": "The interval as one page on What's New.",
+           "type": "string"
+          },
+          "compareMarkdownUrl": {
+           "description": "The same interval as markdown, with every release's notes.",
+           "type": "string"
+          }
+         },
+         "required": [
+          "from",
+          "status",
+          "releases",
+          "unordered"
+         ],
+         "additionalProperties": false
+        }
+       },
+       "required": [
+        "name",
+        "from",
+        "status"
+       ],
+       "additionalProperties": false
+      },
+      "description": "Most exposed first — CVEs, then security releases, then fixes, then releases behind; untracked last, in the order given."
+     },
+     "notes": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    },
+    "required": [
+     "summary",
+     "dependencies"
+    ],
+    "additionalProperties": false
+   }
+  }
+ ]
+}

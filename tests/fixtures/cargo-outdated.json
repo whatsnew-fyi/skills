@@ -1,0 +1,1 @@
+{"crate_name":"acme-cli","dependencies":[{"name":"serde","project":"1.0.100","compat":"1.0.228","latest":"1.0.228","kind":"Normal","platform":null},{"name":"clap","project":"3.2.25","compat":"---","latest":"4.5.48","kind":"Normal","platform":null},{"name":"old-crate","project":"---","compat":"---","latest":"Removed","kind":"Normal","platform":null}]}

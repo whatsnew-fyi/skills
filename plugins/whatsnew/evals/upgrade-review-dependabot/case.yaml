@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: upgrade-review-dependabot
+description: A Dependabot bump whose minor version carries two breaking changes this code uses.
+tags: [upgrade-review, trigger]
+context:
+  scaffold_script: fixture.sh

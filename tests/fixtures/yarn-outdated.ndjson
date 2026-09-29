@@ -1,0 +1,2 @@
+{"type":"info","data":"Color legend : \n \"<red>\"    : Major Update backward-incompatible updates \n"}
+{"type":"table","data":{"head":["Package","Current","Wanted","Latest","Package Type","URL"],"body":[["react","18.2.0","18.3.1","19.2.0","dependencies","https://react.dev/"],["@acme/ui","1.0.0","1.0.0","1.2.0","dependencies","https://git.acme.test/ui"]]}}

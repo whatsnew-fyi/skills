@@ -1,0 +1,171 @@
+{
+  "@anthropic-ai/sdk": [
+    {
+      "current": "0.126.0",
+      "wanted": "0.126.0",
+      "latest": "0.129.0",
+      "dependent": "agent",
+      "location": "/work/app/packages/agent/node_modules/@anthropic-ai/sdk"
+    },
+    {
+      "current": "0.128.0",
+      "wanted": "0.128.0",
+      "latest": "0.129.0",
+      "dependent": "whatsnew-app",
+      "location": "/work/app/node_modules/@anthropic-ai/sdk"
+    }
+  ],
+  "@babel/core": {
+    "current": "7.29.7",
+    "wanted": "7.29.7",
+    "latest": "8.0.6",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@babel/core"
+  },
+  "@better-auth/drizzle-adapter": {
+    "current": "1.6.29",
+    "wanted": "1.6.29",
+    "latest": "1.7.6",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@better-auth/drizzle-adapter"
+  },
+  "@modelcontextprotocol/sdk": {
+    "current": "1.30.0",
+    "wanted": "1.31.0",
+    "latest": "1.31.0",
+    "dependent": "agent",
+    "location": "/work/app/node_modules/@modelcontextprotocol/sdk"
+  },
+  "@types/node": [
+    {
+      "current": "24.13.3",
+      "wanted": "24.19.0",
+      "latest": "26.6.3",
+      "dependent": "agent",
+      "location": "/work/app/node_modules/@types/node"
+    },
+    {
+      "current": "24.13.3",
+      "wanted": "24.19.0",
+      "latest": "26.6.3",
+      "dependent": "core",
+      "location": "/work/app/node_modules/@types/node"
+    },
+    {
+      "current": "24.13.3",
+      "wanted": "24.19.0",
+      "latest": "26.6.3",
+      "dependent": "whatsnew-app",
+      "location": "/work/app/node_modules/@types/node"
+    }
+  ],
+  "@types/react": {
+    "current": "19.2.18",
+    "wanted": "19.3.0",
+    "latest": "19.3.0",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@types/react"
+  },
+  "@types/react-dom": {
+    "current": "19.2.5",
+    "wanted": "19.3.0",
+    "latest": "19.3.0",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@types/react-dom"
+  },
+  "@vercel/sandbox": {
+    "current": "3.5.0",
+    "wanted": "3.5.1",
+    "latest": "3.5.1",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@vercel/sandbox"
+  },
+  "@vitest/browser": {
+    "current": "4.1.11",
+    "wanted": "4.1.11",
+    "latest": "5.0.2",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@vitest/browser"
+  },
+  "@vitest/browser-playwright": {
+    "current": "4.1.11",
+    "wanted": "4.1.11",
+    "latest": "5.0.2",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@vitest/browser-playwright"
+  },
+  "@vitest/coverage-istanbul": {
+    "current": "4.1.11",
+    "wanted": "4.1.11",
+    "latest": "5.0.2",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/@vitest/coverage-istanbul"
+  },
+  "@whatsnew/core": {
+    "current": "0.1.0",
+    "wanted": "0.3.2",
+    "latest": "0.3.2",
+    "dependent": "agent",
+    "location": "/work/app/node_modules/@whatsnew/core"
+  },
+  "ai": {
+    "current": "7.0.116",
+    "wanted": "7.0.122",
+    "latest": "7.0.122",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/ai"
+  },
+  "better-auth": {
+    "current": "1.6.29",
+    "wanted": "1.6.29",
+    "latest": "1.7.6",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/better-auth"
+  },
+  "sharp": {
+    "current": "0.35.4",
+    "wanted": "0.35.5",
+    "latest": "0.35.5",
+    "dependent": "whatsnew-app",
+    "location": "/work/app/node_modules/sharp"
+  },
+  "typescript": [
+    {
+      "current": "6.0.3",
+      "wanted": "6.0.3",
+      "latest": "7.0.2",
+      "dependent": "agent",
+      "location": "/work/app/node_modules/typescript"
+    },
+    {
+      "current": "6.0.3",
+      "wanted": "6.0.3",
+      "latest": "7.0.2",
+      "dependent": "core",
+      "location": "/work/app/node_modules/typescript"
+    },
+    {
+      "current": "6.0.3",
+      "wanted": "6.0.3",
+      "latest": "7.0.2",
+      "dependent": "whatsnew-app",
+      "location": "/work/app/node_modules/typescript"
+    }
+  ],
+  "vitest": [
+    {
+      "current": "4.1.11",
+      "wanted": "4.1.11",
+      "latest": "5.0.2",
+      "dependent": "agent",
+      "location": "/work/app/node_modules/vitest"
+    },
+    {
+      "current": "4.1.11",
+      "wanted": "4.1.11",
+      "latest": "5.0.2",
+      "dependent": "whatsnew-app",
+      "location": "/work/app/node_modules/vitest"
+    }
+  ]
+}

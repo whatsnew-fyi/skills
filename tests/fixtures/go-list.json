@@ -1,0 +1,83 @@
+{
+	"Path": "claircode.app/clair-agent",
+	"Main": true,
+	"Dir": "/work/agent",
+	"GoMod": "/work/agent/go.mod",
+	"GoVersion": "1.26"
+}
+{
+	"Path": "golang.org/x/crypto",
+	"Version": "v0.54.0",
+	"Time": "2026-07-08T18:22:26Z",
+	"Update": {
+		"Path": "golang.org/x/crypto",
+		"Version": "v0.57.0",
+		"Time": "2026-09-08T18:05:01Z"
+	},
+	"Dir": "/work",
+	"GoMod": "/work",
+	"GoVersion": "1.25.0",
+	"Sum": "h1:YLIA59K4fiNzHzjnZt2tUJQjQtUWfWbeHBqKtk3eScw=",
+	"GoModSum": "h1:KWL8ny2AZdGR2cWmzeHrp2azQPGogOv+HeQaVEXC2dk="
+}
+{
+	"Path": "golang.org/x/net",
+	"Version": "v0.56.0",
+	"Time": "2026-06-09T16:58:42Z",
+	"Update": {
+		"Path": "golang.org/x/net",
+		"Version": "v0.59.0",
+		"Time": "2026-09-08T19:18:02Z"
+	},
+	"Indirect": true
+}
+{
+	"Path": "golang.org/x/sys",
+	"Version": "v0.47.0",
+	"Time": "2026-06-30T17:07:31Z",
+	"Update": {
+		"Path": "golang.org/x/sys",
+		"Version": "v0.48.0",
+		"Time": "2026-08-31T19:43:43Z"
+	},
+	"Dir": "/work",
+	"GoMod": "/work",
+	"GoVersion": "1.25.0",
+	"Sum": "h1:o7XGOvZQCADBQQ4Y7VNq2dRWQR7JmOUW8Kxx4ZsNgWs=",
+	"GoModSum": "h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw="
+}
+{
+	"Path": "golang.org/x/term",
+	"Version": "v0.45.0",
+	"Time": "2026-07-08T15:40:56Z",
+	"Update": {
+		"Path": "golang.org/x/term",
+		"Version": "v0.46.0",
+		"Time": "2026-09-08T16:27:41Z"
+	},
+	"Dir": "/work",
+	"GoMod": "/work",
+	"GoVersion": "1.25.0",
+	"Sum": "h1:NwWyBmoJCbfTHpxrWoZ9C6/VxOf7ic219I8xZZFdrf0=",
+	"GoModSum": "h1:9aqxs0blBcrm/n0L9QW0aRVD+ktan8ssZromtqJC43w="
+}
+{
+	"Path": "golang.org/x/text",
+	"Version": "v0.40.0",
+	"Time": "2026-07-08T15:41:08Z",
+	"Update": {
+		"Path": "golang.org/x/text",
+		"Version": "v0.42.0",
+		"Time": "2026-09-08T16:29:55Z"
+	},
+	"Indirect": true
+}
+{
+	"Path": "rsc.io/qr",
+	"Version": "v0.2.0",
+	"Time": "2018-06-05T10:54:35Z",
+	"Dir": "/work",
+	"GoMod": "/work",
+	"Sum": "h1:6vBLea5/NRMVTz8V66gipeLycZMl/+UlFmk8DvqQ6WY=",
+	"GoModSum": "h1:IF+uZjkb9fqyeF/4tlBoynqmQxUoPfWEKh921coOuXs="
+}
