@@ -253,7 +253,7 @@ The checks, the evals and how to try a skill against production are in
 [`.agents/context/commands.md`](.agents/context/commands.md). Changes are recorded
 in [`CHANGELOG.md`](CHANGELOG.md).
 
-Found a package What's New should track? Suggest it at [whatsnew.fyi](https://whatsnew.fyi).
+Found a package What's New should track? Suggest it at [whatsnew.fyi/suggest](https://whatsnew.fyi/suggest).
 
 ## License
 
