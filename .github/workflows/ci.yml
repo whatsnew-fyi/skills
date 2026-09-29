@@ -24,6 +24,16 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: python -m unittest discover -s tests -v
 
+  lintorama:
+    name: Lint (shellcheck, markdownlint, yamllint, actionlint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Same image and tag as the Stop hook in .claude/hooks/lintorama-stop.sh, so a turn that
+      # ends clean locally passes here. The image walks files through git, and the checkout's
+      # .git sits inside the mount.
+      - run: docker run --rm -v "$PWD":/code zaventh/lintorama:7
+
   manifests:
     name: Manifests, decisions and changelog
     runs-on: ubuntu-latest
