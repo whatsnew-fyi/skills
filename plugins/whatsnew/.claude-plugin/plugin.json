@@ -8,6 +8,7 @@
     "url": "https://whatsnew.fyi"
   },
   "homepage": "https://whatsnew.fyi/mcp/setup",
+  "privacyPolicyUrl": "https://whatsnew.fyi/privacy",
   "repository": "https://github.com/whatsnew-fyi/skills",
   "license": "MIT",
   "keywords": ["dependencies", "upgrades", "changelog", "release-notes", "security", "cve", "dependabot", "renovate", "mcp", "declarative-changelog", "keep-a-changelog", "conventional-commits"]

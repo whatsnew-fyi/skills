@@ -18,12 +18,11 @@ while they differ.
 """
 
 import json
-import os
 import sys
 import urllib.error
 import urllib.request
 
-ENDPOINT = os.environ.get("WHATSNEW_MCP_URL", "https://whatsnew.fyi/mcp")
+ENDPOINT = "https://whatsnew.fyi/mcp"
 USER_AGENT = "whatsnew-skills/0.2.0 (+https://github.com/whatsnew-fyi/skills)"
 TIMEOUT_SECONDS = 90
 

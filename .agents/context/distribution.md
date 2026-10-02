@@ -46,7 +46,28 @@ blocks a plugin folder without a README of at least 40 words outside code blocks
 and its security scan flags any destination the README doesn't disclose. So when a
 skill starts running, sending or fetching something new, update that README's
 "What the plugin runs, sends and fetches" section, and keep its links absolute. It
-overlaps the root README on purpose: change both. Skills directories such as
+overlaps the root README on purpose: change both.
+
+The portal's validator also checks these, and `claude plugin validate --strict` checks
+none of them. Each came back as a warning on the first submission (2026-10-02):
+
+- **Icon:** `plugins/whatsnew/.claude-plugin/icon.png` is the brand app icon, copied
+  from `whatsnew-app`'s `public/icon-512.png` (the same artwork as the Play listing). It
+  must be a square PNG or JPEG, 512 to 2048 px per side and under 2 MB. SVG and WebP
+  are refused. ⚠ The portal reads it **only once**, at the plugin's first save or
+  submit, so changing the file afterwards does not change the listing.
+- **`privacyPolicyUrl`** in `plugin.json` points at `https://whatsnew.fyi/privacy`. Its
+  `#mcp` section covers what the server keeps and what it sends on to deps.dev.
+- **Reading a value from the user's machine** (an environment variable, a dotfile) is
+  flagged with "ask through a `user_config` option instead". The only such read was an
+  unused `WHATSNEW_MCP_URL` override in `whatsnew_call.py`, and it was deleted. A
+  setting a skill really needs belongs in `userConfig`, with `sensitive: true` for a
+  credential.
+- **Name look-alikes:** `whatsnew` was held for review as too close to `whats-new`
+  (`iskysun96/whats-new`). A hold is not a refusal. Renaming changes public names
+  (ADR 2026-09.d3hx).
+
+Skills directories such as
 skills.sh index GitHub repositories that `npx skills` can read. The MCP server is
 already listed in the official MCP registry as `fyi.whatsnew/changelogs`, and on
 Smithery. Those listings belong to `whatsnew-app`, not to this repository.
