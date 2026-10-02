@@ -46,8 +46,9 @@ converts a `CHANGELOG.md` to the [Declarative Changelogs](https://whatsnew.fyi/s
 format, which is Keep a Changelog with YAML frontmatter, a strict release-heading
 grammar and an exact `**Breaking**` marker, so tools stop guessing at your versions,
 dates and breaking changes. It drafts new entries from your Conventional Commits,
-leaves the summary line for you, and runs the `declarative-changelog` validator until
-the file is clean.
+rewrites them for readers, writes the one-sentence summary (or asks you when the
+commits don't make the point of a release clear), and runs the
+`declarative-changelog` validator until the file is clean.
 
 `upgrade-review` and `outdated-audit` get their data from
 [What's New](https://whatsnew.fyi), which tracks the release history of more than a
@@ -212,16 +213,32 @@ runs through `npx`, so that skill needs Node.js 20 or later.
 
 ## What leaves your machine
 
-The dependency skills send `whatsnew.fyi` package names, version numbers and, for npm, each
-package's public source-repository URL (which makes the match exact). They send no
-source code, file paths or anything that names your project.
+The skills' own network traffic goes to two places: `whatsnew.fyi`, for release
+data, and the npm registry, to fetch the changelog validator.
+
+The dependency skills send `whatsnew.fyi`:
+
+- package names, their registry, and version numbers: installed, newest in range,
+  and newest published;
+- for npm packages, each package's public source-repository URL, and for Go and
+  NuGet packages, a package URL (purl). Both make the match exact.
+
+They send no source code, file paths or anything that names your project. Requests
+from the fallback script carry a User-Agent that names the skills' version.
 
 Private packages stay local. The converter drops npm workspace and private-registry
-packages on its own, and takes `--exclude '@yourorg/*'` for anything else internal.
+packages on its own. For anything else internal, in any ecosystem, it takes
+`--exclude '@yourorg/*'`, and the agent leaves out the packages you name as internal.
 
-When a Maven, Go or NuGet package isn't tracked yet, the server counts the miss per
-day, with nothing about the caller, to decide what to track next. To turn that off,
-ask your agent to pass `"recordMisses": false`.
+When a Maven, Go or NuGet package isn't tracked yet, the server checks the name
+against deps.dev and counts the miss per day, with nothing about the caller, to
+decide what to track next. To turn that off, ask your agent to pass
+`"recordMisses": false`.
+
+The skills also fetch two things: `upgrade-review` reads a `whatsnew.fyi`
+compare page, as markdown, when a result was cut short, and `declarative-changelog`
+runs its validator with `npx -y declarative-changelog@0.2`, which downloads it from
+npm.
 
 ## What the skills won't do
 

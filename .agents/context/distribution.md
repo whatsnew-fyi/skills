@@ -38,7 +38,15 @@ and docs (ADR 2026-09.d3hx):
 ## Directories worth listing in
 
 Anthropic's plugin directory takes submissions (see
-<https://code.claude.com/docs/en/plugins/publish>). Skills directories such as
+<https://claude.com/docs/directory/publish>). It takes the plugin folder,
+`plugins/whatsnew/`, as its own submission, and shows `plugins/whatsnew/README.md` as
+the listing's description. The root README doesn't count. The
+[pre-submission checklist](https://claude.com/docs/plugins/pre-submission-checklist)
+blocks a plugin folder without a README of at least 40 words outside code blocks,
+and its security scan flags any destination the README doesn't disclose. So when a
+skill starts running, sending or fetching something new, update that README's
+"What the plugin runs, sends and fetches" section, and keep its links absolute. It
+overlaps the root README on purpose: change both. Skills directories such as
 skills.sh index GitHub repositories that `npx skills` can read. The MCP server is
 already listed in the official MCP registry as `fyi.whatsnew/changelogs`, and on
 Smithery. Those listings belong to `whatsnew-app`, not to this repository.
