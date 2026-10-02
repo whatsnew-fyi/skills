@@ -45,7 +45,8 @@ claude plugin eval . --scaffold --trust-plugin -j 2 --no-publish --judge-model s
   even when the answer is right.
 - `--ablation none` halves the cost while you iterate on graders, and
   `--keep-temp` keeps each run's `trace.jsonl` so you can read what it answered.
-- Results go to `plugins/whatsnew/evals/results/`, which is gitignored.
+- Results go to `plugins/whatsnew/evals/results/`, or to `evals/results/` when the
+  suite is run from the repository root (`claude plugin eval .`). Both are gitignored.
 - A case that grants `Bash` needs the sandbox backend (`bubblewrap` and `socat`).
   Without it the run is refused rather than run unconfined, so the cases grant
   read-only tools (ADR 2026-09.dqcj).

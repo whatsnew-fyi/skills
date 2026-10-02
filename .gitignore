@@ -3,3 +3,4 @@ __pycache__/
 .idea/
 .vscode/
 plugins/whatsnew/evals/results/
+/evals/results/
