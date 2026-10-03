@@ -135,7 +135,7 @@ pass `"recordMisses": false`.
 - a whatsnew.fyi compare page, as markdown, when an upgrade review's result was cut
   short;
 - the `declarative-changelog` validator from npm, run with
-  `npx -y declarative-changelog@0.2`.
+  `npx -y declarative-changelog@0.2.0`.
 
 **Run on your machine:**
 

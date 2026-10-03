@@ -67,6 +67,13 @@ none of them. Each came back as a warning on the first submission (2026-10-02):
   (`iskysun96/whats-new`). A hold is not a refusal. Renaming changes public names
   (ADR 2026-09.d3hx).
 
+The reviewer then sent the first submission back for an unpinned launcher: the
+`declarative-changelog` skill ran `npx -y declarative-changelog@0.2`, a range, and its
+`compatibility` frontmatter named the package with no version at all. The review reads
+skill text, not only hook and MCP commands. Every package a launcher runs is now an
+exact version, and a test keeps it that way (see
+[`skill-authoring.md`](../rules/skill-authoring.md)).
+
 Skills directories such as
 skills.sh index GitHub repositories that `npx skills` can read. The MCP server is
 already listed in the official MCP registry as `fyi.whatsnew/changelogs`, and on

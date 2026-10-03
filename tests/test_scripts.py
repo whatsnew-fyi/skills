@@ -72,6 +72,33 @@ class CopiesStayIdentical(unittest.TestCase):
             )
 
 
+class LaunchersArePinned(unittest.TestCase):
+    """The plugin directory's review refuses a package a launcher runs without an
+    exact version, in skill text as much as in a hook or MCP command. evals/ is left
+    out: its mocks are vendor release notes recorded verbatim, not commands we run."""
+
+    PLUGIN = os.path.join(ROOT, "plugins", "whatsnew")
+    LAUNCH = re.compile(
+        r"\b(?:npx|bunx|pnpm dlx|yarn dlx|uvx|pipx run)((?:\s+-{1,2}[\w-]+)*)\s+([@\w][^\s`'\"]*)"
+    )
+    EXACT = re.compile(r"^(?:@[\w.-]+/)?[\w.-]+(?:@|==)\d+\.\d+\.\d+(?:[-+][\w.-]+)?$")
+
+    def test_every_launched_package_names_an_exact_version(self):
+        launched = []
+        for path in glob.glob(os.path.join(self.PLUGIN, "**", "*"), recursive=True):
+            relative = os.path.relpath(path, self.PLUGIN)
+            if relative.startswith("evals" + os.sep) or not os.path.isfile(path):
+                continue
+            if not path.endswith((".md", ".json", ".py", ".sh", ".yml", ".yaml")):
+                continue
+            with open(path, encoding="utf-8") as handle:
+                for match in self.LAUNCH.finditer(handle.read()):
+                    launched.append((relative, match.group(2)))
+        self.assertTrue(launched, "expected the declarative-changelog validator launch")
+        for relative, package in launched:
+            self.assertRegex(package, self.EXACT, f"{relative} runs {package} without an exact version")
+
+
 class Detection(unittest.TestCase):
     def test_each_fixture_is_detected(self):
         cases = {

@@ -50,4 +50,4 @@ jobs:
       - run: claude plugin validate --strict plugins/whatsnew
       - run: python scripts/adr.py index --check
       # Dogfood: this repo's changelog is itself a Declarative Changelog.
-      - run: npx -y declarative-changelog@0.2 validate CHANGELOG.md --require-level 2 --max-warnings 0
+      - run: npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --require-level 2 --max-warnings 0

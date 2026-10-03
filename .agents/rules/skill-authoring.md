@@ -58,6 +58,10 @@ new skills too.
   `declarative-changelog` npm package (`src/constants.ts`). When either changes,
   refresh `references/format.md` and the pinned `declarative-changelog@<version>` in the
   skill, the CIs and `.agents/context/commands.md`, together.
+- The pin is an exact version (`@0.2.0`), never a range (`@0.2`) or a bare package
+  name, anywhere in the plugin folder: frontmatter, skill text, references and
+  README. The plugin directory's review refuses a range, and
+  `tests/test_scripts.py` (`LaunchersArePinned`) fails on one.
 
 ## Every change ships with its evidence
 

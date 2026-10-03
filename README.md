@@ -237,7 +237,7 @@ decide what to track next. To turn that off, ask your agent to pass
 
 The skills also fetch two things: `upgrade-review` reads a `whatsnew.fyi`
 compare page, as markdown, when a result was cut short, and `declarative-changelog`
-runs its validator with `npx -y declarative-changelog@0.2`, which downloads it from
+runs its validator with `npx -y declarative-changelog@0.2.0`, which downloads it from
 npm.
 
 ## What the skills won't do

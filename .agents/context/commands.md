@@ -13,7 +13,7 @@ python3 -m unittest discover -s tests                 # the skills' scripts
 claude plugin validate --strict .                      # marketplace manifest
 claude plugin validate --strict plugins/whatsnew       # plugin, skills, .mcp.json
 python3 scripts/adr.py index --check                   # decisions router is current
-npx -y declarative-changelog@0.2 validate CHANGELOG.md --require-level 2 --max-warnings 0
+npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
 `.claude/hooks/lintorama-stop.sh` runs the `zaventh/lintorama` container (shellcheck,
