@@ -17,6 +17,19 @@ document:
 
 This file is a [Declarative Changelog](https://whatsnew.fyi/spec), validated in CI.
 
+## [0.4.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.4.0) — 2026-10-14T00:00:00Z
+
+> The changelog skill now sets up the release tool that writes your changelog, from configuration tested against each tool.
+
+### Added
+
+- The `declarative-changelog` skill sets up git-cliff, semantic-release, commit-and-tag-version, release-please, Changesets or GoReleaser to write or publish a conforming changelog, from the validator's tested templates. Before it adds an entry by hand, it checks whether a tool writes the file.
+
+### Changed
+
+- The validator is pinned to `declarative-changelog@0.4.0`, whose `normalize` keeps `## [Unreleased]` on top for release-please and takes several files for a Changesets monorepo.
+- When it sets up git-cliff, semantic-release or commit-and-tag-version, the changelog skill fetches that tool's configuration from the validator's GitHub repository, at the pinned version. Both READMEs list it with what the skills fetch.
+
 ## [0.3.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.3.0) — 2026-10-14T00:00:00Z
 
 > The changelog skill now sets up the validator's GitHub Action or pre-commit hook, and repairs what release-please and changesets write.
