@@ -99,6 +99,35 @@ class LaunchersArePinned(unittest.TestCase):
             self.assertRegex(package, self.EXACT, f"{relative} runs {package} without an exact version")
 
 
+class ValidatorRefsAgree(unittest.TestCase):
+    """The validator's Action, its pre-commit rev and the links to its tested
+    release-tool templates name a version too. Each must be the version the skill
+    runs, or a template link serves a config written for another validator."""
+
+    PLUGIN = os.path.join(ROOT, "plugins", "whatsnew")
+    PIN = re.compile(r"declarative-changelog@(\d+\.\d+\.\d+)")
+    REFS = re.compile(
+        r"whatsnew-fyi/declarative-changelog(?:/(?:tree|blob))?[/@]v(\d+\.\d+\.\d+)"
+        r"|rev: v(\d+\.\d+\.\d+)"
+    )
+
+    def test_every_ref_names_the_pinned_version(self):
+        pins, refs = set(), []
+        for path in glob.glob(os.path.join(self.PLUGIN, "**", "*.md"), recursive=True):
+            relative = os.path.relpath(path, self.PLUGIN)
+            if relative.startswith("evals" + os.sep):
+                continue
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+            pins.update(self.PIN.findall(text))
+            refs += [(relative, a or b) for a, b in self.REFS.findall(text)]
+        self.assertEqual(len(pins), 1, f"one validator version across the plugin, got {pins}")
+        self.assertTrue(refs, "expected the Action, rev and template links")
+        (pin,) = pins
+        for relative, version in refs:
+            self.assertEqual(version, pin, f"{relative} names v{version}, the pin is {pin}")
+
+
 class Detection(unittest.TestCase):
     def test_each_fixture_is_detected(self):
         cases = {

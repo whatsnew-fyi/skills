@@ -57,7 +57,9 @@ new skills too.
   <https://whatsnew.fyi/spec.md>). The validator's closed vocabularies live in the
   `declarative-changelog` npm package (`src/constants.ts`). When either changes,
   refresh `references/format.md` and the pinned `declarative-changelog@<version>` in the
-  skill, the CIs and `.agents/context/commands.md`, together.
+  skill, the CIs and `.agents/context/commands.md`, together. The validator's
+  `templates/` are the source for `references/release-tools.md`: its snippets and its
+  `v<version>` template links move with the pin.
 - The pin is an exact version (`@0.2.0`), never a range (`@0.2`) or a bare package
   name, anywhere in the plugin folder: frontmatter, skill text, references and
   README. The plugin directory's review refuses a range, and

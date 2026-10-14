@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: declarative-changelog-release-please
+description: A release-please project whose release PRs fail the declarative-changelog check in CI, set up so the next one passes.
+tags: [declarative-changelog, trigger]
+context:
+  scaffold_script: fixture.sh

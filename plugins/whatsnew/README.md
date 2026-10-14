@@ -43,7 +43,10 @@ an exact `**Breaking**` marker, so bots and aggregators stop guessing at your
 versions, dates and breaking changes. It drafts new entries from your Conventional
 Commits, rewrites them for readers, writes the one-sentence summary (or asks you when
 the commits don't make the point of a release clear), and runs the validator until
-the file is clean. This skill works locally and calls no server.
+the file is clean. When git-cliff, semantic-release, commit-and-tag-version,
+release-please, Changesets or GoReleaser writes your releases, it sets that tool up to
+write the format too, from configuration tested against each one. This skill calls no
+What's New server.
 
 ## Use
 
@@ -135,7 +138,9 @@ pass `"recordMisses": false`.
 - a whatsnew.fyi compare page, as markdown, when an upgrade review's result was cut
   short;
 - the `declarative-changelog` validator from npm, run with
-  `npx -y declarative-changelog@0.3.0`.
+  `npx -y declarative-changelog@0.4.0`;
+- a release tool's tested configuration from the validator's GitHub repository, at
+  the same version, when you ask `declarative-changelog` to set the tool up.
 
 **Run on your machine:**
 
@@ -148,7 +153,8 @@ pass `"recordMisses": false`.
   writing any file;
 - `declarative-changelog validate`.
 
-**Written:** only the `CHANGELOG.md` you ask `declarative-changelog` to write.
+**Written:** only the `CHANGELOG.md` you ask `declarative-changelog` to write, and
+the release tool's configuration when you ask it to set one up.
 
 ## What the skills won't do
 

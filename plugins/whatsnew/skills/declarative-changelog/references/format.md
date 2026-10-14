@@ -199,7 +199,7 @@ the change a reader sees, so rewrite them.
 
 ## Validator rule → fix
 
-`npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --format json` reports each
+`npx -y declarative-changelog@0.4.0 validate CHANGELOG.md --format json` reports each
 problem with a `rule` id and a position.
 
 | Rule | Fix |

@@ -27,7 +27,7 @@ notes for you, for every release in the range, and check them against your code.
 | --- | --- | --- |
 | [`upgrade-review`](plugins/whatsnew/skills/upgrade-review/SKILL.md) | *What has to change in this codebase before the upgrade is safe to merge?* | reviewing a Dependabot or Renovate PR, bumping a package, SDK, framework or GitHub Action, or planning a major-version move |
 | [`outdated-audit`](plugins/whatsnew/skills/outdated-audit/SKILL.md) | *What is this project missing by being behind, and what should we update first?* | you have a pile of outdated dependencies and limited time, or you want to know which security fixes you don't have yet |
-| [`declarative-changelog`](plugins/whatsnew/skills/declarative-changelog/SKILL.md) | *Does our changelog say what changed, in a form both a reader and a parser get right?* | cutting a release, writing a changelog entry from commits, or converting an existing `CHANGELOG.md` so bots and aggregators read it correctly |
+| [`declarative-changelog`](plugins/whatsnew/skills/declarative-changelog/SKILL.md) | *Does our changelog say what changed, in a form both a reader and a parser get right?* | cutting a release, writing a changelog entry from commits, converting an existing `CHANGELOG.md` so bots and aggregators read it correctly, or making your release tool write it that way |
 
 **`upgrade-review`** collects the vendor's own breaking-change, migration,
 deprecation and security notes for every release between your version and the
@@ -48,13 +48,16 @@ grammar and an exact `**Breaking**` marker, so tools stop guessing at your versi
 dates and breaking changes. It drafts new entries from your Conventional Commits,
 rewrites them for readers, writes the one-sentence summary (or asks you when the
 commits don't make the point of a release clear), and runs the
-`declarative-changelog` validator until the file is clean.
+`declarative-changelog` validator until the file is clean. When git-cliff,
+semantic-release, commit-and-tag-version, release-please, Changesets or GoReleaser
+writes your releases, it sets that tool up to write the format too, from
+configuration tested against each one.
 
 `upgrade-review` and `outdated-audit` get their data from
 [What's New](https://whatsnew.fyi), which tracks the release history of more than a
 thousand packages, apps and tools and serves it over a public
 [MCP server](https://whatsnew.fyi/mcp/setup). No API key, no sign-in.
-`declarative-changelog` runs locally and needs no server.
+`declarative-changelog` runs locally and needs no What's New server.
 
 ## Install
 
@@ -206,7 +209,7 @@ A bundled converter (`outdated_to_deps.py`) reads the outdated report from your
 package manager, batches it into tool calls, and adds what the server needs for an
 exact match.
 
-`declarative-changelog` calls no server. Its draft script (`draft_entry.py`) reads
+`declarative-changelog` calls no What's New server. Its draft script (`draft_entry.py`) reads
 `git log` and maps commit types to changelog categories using the spec's table. The
 [`declarative-changelog`](https://www.npmjs.com/package/declarative-changelog) validator
 runs through `npx`, so that skill needs Node.js 20 or later.
@@ -235,16 +238,18 @@ against deps.dev and counts the miss per day, with nothing about the caller, to
 decide what to track next. To turn that off, ask your agent to pass
 `"recordMisses": false`.
 
-The skills also fetch two things: `upgrade-review` reads a `whatsnew.fyi`
-compare page, as markdown, when a result was cut short, and `declarative-changelog`
-runs its validator with `npx -y declarative-changelog@0.3.0`, which downloads it from
-npm.
+The skills also fetch three things: `upgrade-review` reads a `whatsnew.fyi`
+compare page, as markdown, when a result was cut short; `declarative-changelog`
+runs its validator with `npx -y declarative-changelog@0.4.0`, which downloads it from
+npm; and when you ask it to set up a release tool, it fetches that tool's tested
+configuration from the validator's GitHub repository, at the same version.
 
 ## What the skills won't do
 
 - **Change your code or run installers.** They review and audit. Updating is your
-  call, and they give you the exact command. The one file a skill edits is the
-  changelog you ask `declarative-changelog` to write.
+  call, and they give you the exact command. The files a skill edits are the
+  changelog you ask `declarative-changelog` to write and, when you ask it to set one
+  up, your release tool's configuration.
 - **Invent release facts.** `declarative-changelog` leaves out a date, version or
   link it can't find in your repository, and tells you which ones.
 - **Call an upgrade safe on missing data.** A package What's New doesn't track is

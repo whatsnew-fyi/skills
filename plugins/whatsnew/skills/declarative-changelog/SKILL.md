@@ -9,12 +9,15 @@ description: >-
   release entry to CHANGELOG.md, writing a changelog or release notes from
   commits, preparing or cutting a release, converting an existing changelog or
   Keep a Changelog file, fixing `declarative-changelog validate` errors, adding
-  a changelog check to CI or a pre-commit hook, or when a CHANGELOG.md starts
-  with `changelog: "0.1"` frontmatter.
+  a changelog check to CI or a pre-commit hook, making git-cliff,
+  semantic-release, commit-and-tag-version, release-please, Changesets or
+  GoReleaser write or publish it, or when a CHANGELOG.md starts with
+  `changelog: "0.1"` frontmatter.
 license: MIT
 compatibility: >-
-  Validates with `npx declarative-changelog@0.3.0` (Node.js 20+, fetched from npm).
-  The draft script needs python3 and git. Calls no other service.
+  Validates with `npx declarative-changelog@0.4.0` (Node.js 20+, fetched from npm).
+  The draft script needs python3 and git. Release-tool configurations are fetched
+  from the validator's GitHub repository when one is set up. Calls no other service.
 ---
 
 # Declarative changelog
@@ -41,11 +44,18 @@ work out which of these the user wants:
   `changelog: "0.1"`). Go to step 4.
 - **Fix diagnostics:** the validator or CI failed. Go to step 5.
 - **Gate CI:** go to step 6.
+- **Set up a release tool:** git-cliff, semantic-release, commit-and-tag-version,
+  release-please, Changesets or GoReleaser writes or publishes the notes, or should.
+  Go to step 7.
+
+Check which tool writes the file before any of these (the table in
+[`references/release-tools.md`](references/release-tools.md)). If one does, an entry
+written by hand is overwritten or broken at its next release.
 
 ## 2. Validate first
 
 ```sh
-npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --format json
+npx -y declarative-changelog@0.4.0 validate CHANGELOG.md --format json
 ```
 
 Read `files[0].level` (0, 1 or 2), `entries`, `skipped`, and each diagnostic's
@@ -83,10 +93,15 @@ section names and placement change.
    pre-release suffix or a hatch `channel:`. A withdrawn release gets `(yanked)` and
    a `superseded-by:`.
 6. Keep `## Unreleased` at the top. It is skipped by design.
+7. If a release tool writes the file, set it up as well (step 7). Otherwise its next
+   release undoes the conversion.
 
 ## 4. Add a release
 
-Draft the entry from the commits since the last tag:
+If a release tool writes the file, the tool writes the entry. Write only its summary,
+into the release PR or the new entry, and check the tool is set up (step 7).
+
+Otherwise, draft the entry from the commits since the last tag:
 
 ```sh
 python3 scripts/draft_entry.py --since v1.4.0 \
@@ -122,7 +137,7 @@ Then turn the draft into notes:
 The target is Level 2 with no warnings:
 
 ```sh
-npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
+npx -y declarative-changelog@0.4.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
 Fix each diagnostic with the "Validator rule → fix" table in
@@ -137,7 +152,7 @@ On GitHub, the validator's own action annotates each problem on the pull request
 
 ```yaml
 # .github/workflows/ci.yml
-- uses: whatsnew-fyi/declarative-changelog@v0.3.0
+- uses: whatsnew-fyi/declarative-changelog@v0.4.0
   with:
     max-warnings: 0
 ```
@@ -145,19 +160,30 @@ On GitHub, the validator's own action annotates each problem on the pull request
 Elsewhere, run the same check directly:
 
 ```sh
-npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
+npx -y declarative-changelog@0.4.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
 For pre-commit, the repository `https://github.com/whatsnew-fyi/declarative-changelog`
-at `rev: v0.3.0` provides the hook `id: declarative-changelog`.
+at `rev: v0.4.0` provides the hook `id: declarative-changelog`.
 
-If a release tool writes the file, add a repair step right after it and before the
-check. release-please and changesets write headings and sections the format
-rejects, and `normalize` fixes the new entries without touching published ones:
+If a release tool writes the file, set it up before adding the gate (step 7), or the
+gate fails on its next release.
 
-```sh
-npx -y declarative-changelog@0.3.0 normalize --write CHANGELOG.md
-```
+## 7. Set up the release tool
+
+Follow [`references/release-tools.md`](references/release-tools.md) for the tool the
+project uses. Each configuration there is tested against the real tool.
+
+- **git-cliff, semantic-release, commit-and-tag-version:** configuration alone. Fetch
+  the tested file and merge it into the project's own, changing only the product
+  facts. Never write one from memory; if you can't fetch it, give the user the link.
+- **release-please, Changesets:** they write headings the format rejects, so
+  `normalize` runs right after them. It repairs only the entries the tool just wrote.
+- **GoReleaser:** it reads the changelog rather than writing one. `extract` hands it
+  the tag's entry.
+
+The project's release config is its own: show the change and say what it does
+before you edit it. Don't change versions, tags or the release flow itself.
 
 ## Report
 
