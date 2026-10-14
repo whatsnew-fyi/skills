@@ -199,7 +199,7 @@ the change a reader sees, so rewrite them.
 
 ## Validator rule → fix
 
-`npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --format json` reports each
+`npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --format json` reports each
 problem with a `rule` id and a position.
 
 | Rule | Fix |
@@ -212,6 +212,7 @@ problem with a `rule` id and a position.
 | `heading/candidate-does-not-parse` | fix to the grammar: pad the date, put it last, use ` — `, replace a no-break space. If it isn't a release, take the date out of the heading |
 | `heading/unknown-tag` | only `yanked` or `routine`. Move a channel to the hatch `channel:` and a platform to `platforms:` |
 | `heading/channel-as-prerelease` | `2.0.0-stable` is a pre-release named `stable`: drop the suffix, and put the channel in the hatch |
+| `heading/bracketed-label` | `## [1.2.3] - date` with no `[1.2.3]: url` definition: add the definition at the foot, or write the link inline as `## [1.2.3](url) — date` |
 | `order/not-newest-first` | reorder the entries, newest first |
 | `identity/duplicate-id` | two entries share a version or a versionless date: give one a hatch `id` |
 | `hatch/misplaced` | move the ```` ```changelog ```` block directly under its `##` heading, before the summary |

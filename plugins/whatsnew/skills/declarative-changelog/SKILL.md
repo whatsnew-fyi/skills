@@ -13,7 +13,7 @@ description: >-
   with `changelog: "0.1"` frontmatter.
 license: MIT
 compatibility: >-
-  Validates with `npx declarative-changelog@0.2.0` (Node.js 20+, fetched from npm).
+  Validates with `npx declarative-changelog@0.3.0` (Node.js 20+, fetched from npm).
   The draft script needs python3 and git. Calls no other service.
 ---
 
@@ -45,7 +45,7 @@ work out which of these the user wants:
 ## 2. Validate first
 
 ```sh
-npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --format json
+npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --format json
 ```
 
 Read `files[0].level` (0, 1 or 2), `entries`, `skipped`, and each diagnostic's
@@ -122,7 +122,7 @@ Then turn the draft into notes:
 The target is Level 2 with no warnings:
 
 ```sh
-npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
+npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
 ```
 
 Fix each diagnostic with the "Validator rule → fix" table in
@@ -133,14 +133,31 @@ Report those, quoting the validator's message.
 ## 6. Offer the gate
 
 Offer to add the same check to CI so the file stays valid. Don't add it unasked.
+On GitHub, the validator's own action annotates each problem on the pull request:
 
 ```yaml
 # .github/workflows/ci.yml
-- run: npx -y declarative-changelog@0.2.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
+- uses: whatsnew-fyi/declarative-changelog@v0.3.0
+  with:
+    max-warnings: 0
 ```
 
-For an npm project, a `"changelog:check"` script with the same command works in CI
-and in a pre-commit hook.
+Elsewhere, run the same check directly:
+
+```sh
+npx -y declarative-changelog@0.3.0 validate CHANGELOG.md --require-level 2 --max-warnings 0
+```
+
+For pre-commit, the repository `https://github.com/whatsnew-fyi/declarative-changelog`
+at `rev: v0.3.0` provides the hook `id: declarative-changelog`.
+
+If a release tool writes the file, add a repair step right after it and before the
+check. release-please and changesets write headings and sections the format
+rejects, and `normalize` fixes the new entries without touching published ones:
+
+```sh
+npx -y declarative-changelog@0.3.0 normalize --write CHANGELOG.md
+```
 
 ## Report
 
