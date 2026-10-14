@@ -8,7 +8,7 @@ product:
   versioning: semver
   category: developer-tools
 document:
-  updated: 2026-09-29T05:59:00Z
+  updated: 2026-10-14T00:00:00Z
   coverage: complete
   canonical: https://github.com/whatsnew-fyi/skills/blob/main/CHANGELOG.md
 ---
@@ -16,6 +16,24 @@ document:
 # whatsnew skills changelog
 
 This file is a [Declarative Changelog](https://whatsnew.fyi/spec), validated in CI.
+
+## [0.3.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.3.0) — 2026-10-14T00:00:00Z
+
+> The changelog skill now sets up the validator's GitHub Action or pre-commit hook, and repairs what release-please and changesets write.
+
+### Added
+
+- The `declarative-changelog` skill offers the validator's GitHub Action, which annotates each problem on the pull request, and its pre-commit hook.
+- The `declarative-changelog` skill adds `declarative-changelog normalize --write` after release-please or changesets, which repairs the headings and sections those tools write in new entries.
+- A listing icon and a privacy policy link for the plugin directory.
+
+### Changed
+
+- The validator is pinned to exactly `declarative-changelog@0.3.0`. Every package a skill launches names an exact version.
+
+### Removed
+
+- The `WHATSNEW_MCP_URL` override in `whatsnew_call.py`. The scripts always call `https://whatsnew.fyi/mcp`.
 
 ## [0.2.0](https://github.com/whatsnew-fyi/skills/releases/tag/v0.2.0) — 2026-09-29T05:59:00Z
 

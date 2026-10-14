@@ -23,7 +23,7 @@ import urllib.error
 import urllib.request
 
 ENDPOINT = "https://whatsnew.fyi/mcp"
-USER_AGENT = "whatsnew-skills/0.2.0 (+https://github.com/whatsnew-fyi/skills)"
+USER_AGENT = "whatsnew-skills/0.3.0 (+https://github.com/whatsnew-fyi/skills)"
 TIMEOUT_SECONDS = 90
 
 
